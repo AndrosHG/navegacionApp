@@ -4,6 +4,7 @@ import com.sienrgitec.navegacionapp.modelos.ctDomicilio;
 import com.sienrgitec.navegacionapp.modelos.ctPainani;
 import com.sienrgitec.navegacionapp.modelos.ctProveedor;
 import com.sienrgitec.navegacionapp.modelos.ctUsuario;
+import com.sienrgitec.navegacionapp.modelos.opPedPainaniDet;
 import com.sienrgitec.navegacionapp.modelos.opPedidoDet;
 import com.sienrgitec.navegacionapp.modelos.opUbicaPainani;
 
@@ -29,6 +30,9 @@ public class Globales {
     public static List<ctProveedor> g_ctProvList  = null;
     public static List<ctDomicilio> g_ctDomList   = null;
     public static List<opPedidoDet> g_PedidoListD = null;
+    public static List<opPedidoDet>  g_opPedidoDetList     = null;
 
     public static ArrayList<opUbicaPainani> opUbicacionList  = new ArrayList<>();
+    public static List<opPedPainaniDet> g_ctPedPainaniDetList = null;
+
 }

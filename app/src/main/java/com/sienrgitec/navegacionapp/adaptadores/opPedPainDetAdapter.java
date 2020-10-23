@@ -55,10 +55,10 @@ public class opPedPainDetAdapter extends RVAdapter<opPedPainaniDet_> {
 
 
             TextView ipedido = (TextView)viewHolder.getView(R.id.tvPedido);
-            ipedido.setText(item.getiPedido());
+            ipedido.setText(item.getiPedido().toString());
 
-            TextView detotArt = (TextView)viewHolder.getView(R.id.tvTotArt);
-            detotArt.setText(item.getDeTotalPiezas());
+            /*TextView detotArt = (TextView)viewHolder.getView(R.id.tvTotArt);
+            detotArt.setText(item.getDeTotalPiezas().toString());*/
 
             TextView cNegocio = (TextView)viewHolder.getView(R.id.tvNegocio);
             cNegocio.setText(item.getcNegocion());
