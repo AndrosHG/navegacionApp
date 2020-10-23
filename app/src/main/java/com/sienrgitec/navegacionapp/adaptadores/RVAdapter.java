@@ -21,7 +21,7 @@ public abstract class RVAdapter<T> extends RecyclerView.Adapter<RVAdapter.ListVi
     private Context context;
     private OnViewHolderClick<T> listener;
 
-    protected abstract void bindView(ctProveedor_ item, ListViewHolder viewHolder);
+    //protected abstract void bindView(ctProveedor_ item, ListViewHolder viewHolder);
 
     public interface OnViewHolderClick<T> {
         void onClick(View view, int position, T item);
