@@ -97,6 +97,7 @@ public class TerminadosFragment extends Fragment {
         }
     }
     public void BuscarPedidos(){
+        listafinal.clear();
         getmRequestQueue();
         String urlParams = String.format(url + "opPedPainani?ipiPainani=%1$s",  1);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -148,6 +149,8 @@ public class TerminadosFragment extends Fragment {
                                     pasaLista.setiProveedor(obj.getiProveedor());
                                     pasaLista.setcNegocion(obj.getcNegocion());
                                     pasaLista.setcDirProveedor(obj.getcDirProveedor());
+                                    pasaLista.setiPartida(obj.getiPartida());
+                                    pasaLista.setiPedidoProv(obj.getiPedidoProv());
                                     listafinal.add(pasaLista);
                                 }
 

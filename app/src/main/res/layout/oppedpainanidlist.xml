@@ -92,14 +92,15 @@
 
     <TextView
         android:id="@+id/tvDir"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginLeft="12dp"
         android:layout_marginTop="5dp"
         android:text="Domicilio"
-        android:textSize="15sp"
         android:textColor="@color/ordenEnc"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvNegocio" />
 
@@ -114,4 +115,22 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvDir" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="63dp"
+        android:layout_height="38dp"
+        android:text="llega"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline5"
+        tools:layout_editor_absoluteY="76dp" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="63dp"
+        android:layout_height="36dp"
+        android:text="sale"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline5"
+        tools:layout_editor_absoluteY="78dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

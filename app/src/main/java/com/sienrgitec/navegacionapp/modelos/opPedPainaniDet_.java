@@ -55,6 +55,14 @@ public class opPedPainaniDet_ implements Serializable {
     @Expose
     private Integer iPedidoProv;
 
+    public Integer getiPedidoProv() {
+        return iPedidoProv;
+    }
+
+    public void setiPedidoProv(Integer iPedidoProv) {
+        this.iPedidoProv = iPedidoProv;
+    }
+
     public String getcDirProveedor() {
         return cDirProveedor;
     }
@@ -143,11 +151,5 @@ public class opPedPainaniDet_ implements Serializable {
         this.iProveedor = iProveedor;
     }
 
-    public Integer getiPedidoProv() {
-        return iPedidoProv;
-    }
 
-    public void setiPedidoProv(Integer iPedidoProv) {
-        this.iPedidoProv = iPedidoProv;
-    }
 }
