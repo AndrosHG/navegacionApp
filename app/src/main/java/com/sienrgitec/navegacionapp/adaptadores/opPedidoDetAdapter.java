@@ -57,22 +57,26 @@ public class opPedidoDetAdapter extends RecyclerView.Adapter<opPedidoDetAdapter.
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView pedido, cant, nparte, desc;
+        TextView pedido, cant, obs, desc;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             pedido = (TextView)  itemView.findViewById(R.id.tvPedido);
             cant   = (TextView)  itemView.findViewById(R.id.tvCant);
-            nparte = (TextView)  itemView.findViewById(R.id.tvNParte);
             desc   = (TextView)  itemView.findViewById(R.id.tvDesc);
+            obs    = (TextView)  itemView.findViewById(R.id.tvObs);
         }
 
         public void asignaDatos(opPedidoDet opPedidoDet) {
-
-
-            cant.setText(opPedidoDet.getDeCantidad().toString());
-            nparte.setText(opPedidoDet.getcNumParte());
+            pedido.setText("Pedido: " + opPedidoDet.getiPedido());
+            cant.setText("Cant. " + opPedidoDet.getDeCantidad().toString() + "0");
             desc.setText(opPedidoDet.getcDescripcion());
+            if(opPedidoDet.getcObservaciones() == null) {
+                obs.setText("Obs. ");
+            }   else{
+                obs.setText("Obs. " + opPedidoDet.getcObservaciones());
+            }
+
         }
     }
 }

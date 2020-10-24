@@ -84,17 +84,10 @@ public class MuestraDet  extends Activity {
         listaDet = new ArrayList<>();
 
         for(opPedidoDet objPedDet: globales.g_opPedidoDetList){
-
-
                 if(objPedDet.getiPedidoProv().equals(viProvID)
                     && objPedDet.getiPedido().equals(viPedido)) {
-
                     listaDet.add(objPedDet);
                 }
-
-
-
-
         }
 
         adapterDet = new opPedidoDetAdapter(listaDet);

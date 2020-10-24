@@ -7,4 +7,5 @@
     <color name="colorText1">#000000</color>
     <color name="background">#000000</color>
     <color name="ordenEnc">#30076b</color>
+    <color name="txtbtn">#ff0000</color>
 </resources>

@@ -15,7 +15,7 @@
         android:layout_marginTop="10dp"
         android:text="Pedido"
         android:textColor="@color/ordenEnc"
-        android:textSize="18sp"
+        android:textSize="12sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,7 +35,7 @@
         android:layout_height="45dp"
         android:layout_marginStart="5dp"
         android:layout_marginLeft="5dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="80dp"
         android:layout_marginRight="80dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -52,7 +52,7 @@
         android:layout_height="45dp"
         android:layout_marginStart="10dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -67,14 +67,16 @@
         android:id="@+id/tvTotArt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="150dp"
         android:layout_marginLeft="12dp"
-        android:layout_marginTop="4dp"
-        android:text="Total Art"
+        android:layout_marginTop="10dp"
+        android:text="Tot.Art."
         android:textColor="@color/ordenEnc"
-        android:textSize="15sp"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline5"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvPedido" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvNegocio"
@@ -84,7 +86,7 @@
         android:layout_marginLeft="12dp"
         android:layout_marginTop="5dp"
         android:text="Negocio"
-        android:textSize="15sp"
+        android:textSize="12sp"
         android:textColor="@color/ordenEnc"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvTotArt" />
@@ -99,7 +101,7 @@
         android:layout_marginTop="5dp"
         android:text="Domicilio"
         android:textColor="@color/ordenEnc"
-        android:textSize="15sp"
+        android:textSize="12sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvNegocio" />
@@ -109,7 +111,7 @@
         android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="15dp"
         android:text="---------------------*******---------------------"
         android:textColor="@color/ordenEnc"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
@@ -118,19 +120,29 @@
 
     <Button
         android:id="@+id/button"
-        android:layout_width="63dp"
-        android:layout_height="38dp"
-        android:text="llega"
+        android:layout_width="87dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="16dp"
+        android:text="REGISTRA     entrada"
+        android:textSize="9dp"
+        android:background="@drawable/bgbotones"
+        android:textColor="@color/txtbtn"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.564"
         app:layout_constraintStart_toStartOf="@+id/guideline5"
-        tools:layout_editor_absoluteY="76dp" />
-
+        app:layout_constraintTop_toBottomOf="@+id/imageView8" />
     <Button
         android:id="@+id/button2"
-        android:layout_width="63dp"
-        android:layout_height="36dp"
-        android:text="sale"
+        android:layout_width="87dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="16dp"
+        android:text="REGISTRA      SALIDA"
+        android:textSize="9dp"
+        android:background="@drawable/bgbotones"
+        android:textColor="@color/txtbtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline5"
-        tools:layout_editor_absoluteY="78dp" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView9" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

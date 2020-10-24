@@ -10,7 +10,7 @@ public class TerminadosViewModel extends ViewModel {
 
     public TerminadosViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is terminados fragment");
+        mText.setValue("Pedido Actual");
     }
 
     public LiveData<String> getText() {
