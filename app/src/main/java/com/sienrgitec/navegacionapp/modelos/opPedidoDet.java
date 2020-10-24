@@ -9,7 +9,42 @@ public class opPedidoDet implements Serializable {
     private String cNumParte;
     private String cObservaciones;
     private Double deCantidad;
+    private  Integer iPedido;
+    private Integer iProveedor;
+    private Integer iPartida;
+    private  Integer iPedidoProv;
 
+    public Integer getiPedidoProv() {
+        return iPedidoProv;
+    }
+
+    public void setiPedidoProv(Integer iPedidoProv) {
+        this.iPedidoProv = iPedidoProv;
+    }
+
+    public Integer getiPartida() {
+        return iPartida;
+    }
+
+    public void setiPartida(Integer iPartida) {
+        this.iPartida = iPartida;
+    }
+
+    public Integer getiPedido() {
+        return iPedido;
+    }
+
+    public void setiPedido(Integer iPedido) {
+        this.iPedido = iPedido;
+    }
+
+    public Integer getiProveedor() {
+        return iProveedor;
+    }
+
+    public void setiProveedor(Integer iProveedor) {
+        this.iProveedor = iProveedor;
+    }
 
     public String getcArticulo() {
         return cArticulo;

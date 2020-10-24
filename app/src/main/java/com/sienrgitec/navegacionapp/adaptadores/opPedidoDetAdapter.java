@@ -68,11 +68,7 @@ public class opPedidoDetAdapter extends RecyclerView.Adapter<opPedidoDetAdapter.
         }
 
         public void asignaDatos(opPedidoDet opPedidoDet) {
-            if(opPedidoDet.getiFolioSusp() != null){
-                pedido.setText(opPedidoDet.getiFolioSusp().toString());
-            }else{
-                pedido.setText("0");
-            }
+
 
             cant.setText(opPedidoDet.getDeCantidad().toString());
             nparte.setText(opPedidoDet.getcNumParte());
