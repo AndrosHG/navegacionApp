@@ -10,6 +10,11 @@
         android:name="com.sienrgitec.navegacionapp.ui.home.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/nav_slidefin"
+        android:name="com.sienrgitec.navegacionapp.ui.terminados.TerminadosFragment"
+        android:label="@string/menu_slideFin"
+        tools:layout="@layout/fragment_terminados" />
 
     <fragment
         android:id="@+id/nav_gallery"
@@ -29,11 +34,7 @@
         android:label="@string/menu_slideCob"
         tools:layout="@layout/fragment_slidecob" />
 
-    <fragment
-        android:id="@+id/nav_slidefin"
-        android:name="com.sienrgitec.navegacionapp.ui.terminados.TerminadosFragment"
-        android:label="@string/menu_slideFin"
-        tools:layout="@layout/fragment_terminados" />
+
 
 
 </navigation>
