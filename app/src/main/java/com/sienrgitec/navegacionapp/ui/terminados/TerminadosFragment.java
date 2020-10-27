@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,8 +36,11 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.sienrgitec.navegacionapp.R;
+import com.sienrgitec.navegacionapp.actividades.Login;
+import com.sienrgitec.navegacionapp.actividades.MainActivity;
 import com.sienrgitec.navegacionapp.actividades.MapsActivity;
 import com.sienrgitec.navegacionapp.actividades.MuestraDet;
+import com.sienrgitec.navegacionapp.actividades.opEvaluaciones;
 import com.sienrgitec.navegacionapp.adaptadores.ProveedorAdapter;
 import com.sienrgitec.navegacionapp.adaptadores.opPedPainDetAdapter;
 import com.sienrgitec.navegacionapp.configuracion.Globales;
@@ -66,6 +70,7 @@ public class TerminadosFragment extends Fragment {
 
     public Globales globales;
     public String   url = globales.URL;
+    private Integer viPersona;
 
     public RecyclerView recycler;
     public static ArrayList<opPedPainaniDet_> listafinal       = new ArrayList<>();
@@ -73,6 +78,7 @@ public class TerminadosFragment extends Fragment {
 
     private TextView tvEntregaA, tvDomentrega;
     private ImageView ibtnMaps;
+    private Button btnEvalua;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -84,11 +90,10 @@ public class TerminadosFragment extends Fragment {
         ibtnMaps = root.findViewById(R.id.ibtnMapsCli);
 
         ibtnMaps.setVisibility(View.INVISIBLE);
-
+        btnEvalua = root.findViewById(R.id.btnFinPedido);
 
         tvEntregaA = root.findViewById(R.id.tvEntregaA);
         tvDomentrega = root.findViewById(R.id.tvEntregaEn);
-
 
         recycler      = (RecyclerView) root.findViewById(R.id.lista);
         recycler.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
@@ -102,17 +107,25 @@ public class TerminadosFragment extends Fragment {
         BuscarPedidos();
 
 
-
         ibtnMaps.setOnClickListener(v ->{
             Intent intent = new Intent(getContext(), MapsActivity.class);
             intent.putExtra("ipcDom", opPedPainaniList.get(0).getcDirCliente());
             intent.putExtra("ipcProv", opPedPainaniList.get(0).getcCliente());
             startActivity(intent);
-
-
         });
 
+        btnEvalua.setOnClickListener(v ->{
 
+            Log.e("ipiPersona", "--> " + opPedPainaniList.get(0).getiCliente());
+
+            Intent evalua = new Intent(getContext(), opEvaluaciones.class);
+            evalua.putExtra("ipcTipo", "Evaluacion al cliente");
+            evalua.putExtra("ipiPedido", opPedPainaniList.get(0).getiPedido());
+            evalua.putExtra("ipiPersona", opPedPainaniList.get(0).getiCliente());
+            evalua.putExtra("ipcPersona", opPedPainaniList.get(0).getcCliente());
+            evalua.putExtra("ipcTipoPersona", "cliente");
+            startActivity(evalua);
+        });
 
         return root;
     }
