@@ -1,17 +1,8 @@
-package com.sienrgitec.navegacionapp.ui.terminados;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+package com.sienrgitec.navegacionapp.ui.pedidos;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
@@ -23,6 +14,16 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -32,6 +33,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.sienrgitec.navegacionapp.R;
+import com.sienrgitec.navegacionapp.actividades.MapsActivity;
+import com.sienrgitec.navegacionapp.actividades.opEvaluaciones;
 import com.sienrgitec.navegacionapp.adaptadores.opPedPainDetAdapter;
 import com.sienrgitec.navegacionapp.configuracion.Globales;
 import com.sienrgitec.navegacionapp.modelos.opPedPainani;
@@ -49,9 +52,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TerminadosFragment extends Fragment {
+public class PedidoshowFragment extends Fragment {
 
-    private TerminadosViewModel terminadosViewModel;
+    private PedidoshowViewModel slideshowViewModel;
 
     private  static RequestQueue mRequestQueue;
 
@@ -67,13 +70,12 @@ public class TerminadosFragment extends Fragment {
     private ImageView ibtnMaps;
     private Button btnEvalua;
 
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        terminadosViewModel =
-                ViewModelProviders.of(this).get(TerminadosViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_terminados, container, false);
-        final TextView textView = root.findViewById(R.id.text_fin);
+        slideshowViewModel =
+                ViewModelProviders.of(this).get(PedidoshowViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_pedidoshow, container, false);
+        final TextView textView = root.findViewById(R.id.text_slideshow);
         ibtnMaps = root.findViewById(R.id.ibtnMapsCli);
 
         ibtnMaps.setVisibility(View.INVISIBLE);
@@ -85,17 +87,37 @@ public class TerminadosFragment extends Fragment {
         recycler      = (RecyclerView) root.findViewById(R.id.lista);
         recycler.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
 
-        terminadosViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        slideshowViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
-                textView.setText(s);
+                textView.setText("");
             }
         });
-        //BuscarPedidos();
+
+        BuscarPedidos();
+
+        ibtnMaps.setOnClickListener(v ->{
+            Intent intent = new Intent(getContext(), MapsActivity.class);
+            intent.putExtra("ipcDom", opPedPainaniList.get(0).getcDirCliente());
+            intent.putExtra("ipcProv", opPedPainaniList.get(0).getcCliente());
+            startActivity(intent);
+        });
+
+        btnEvalua.setOnClickListener(v ->{
+
+            Log.e("ipiPersona", "--> " + opPedPainaniList.get(0).getiCliente());
+
+            Intent evalua = new Intent(getContext(), opEvaluaciones.class);
+            evalua.putExtra("ipcTipo", "Evaluacion al cliente");
+            evalua.putExtra("ipiPedido", opPedPainaniList.get(0).getiPedido());
+            evalua.putExtra("ipiPersona", opPedPainaniList.get(0).getiCliente());
+            evalua.putExtra("ipcPersona", opPedPainaniList.get(0).getcCliente());
+            evalua.putExtra("ipcTipoPersona", "cliente");
+            startActivity(evalua);
+        });
 
         return root;
     }
-
     public void getmRequestQueue(){
         try{
             if (mRequestQueue == null) {
@@ -109,19 +131,19 @@ public class TerminadosFragment extends Fragment {
 
     public void MuestraMensaje(String vcTitulo, String vcMensaje, Context ipcContext){
 
-            AlertDialog.Builder myBuild = new AlertDialog.Builder(ipcContext);
-            myBuild.setMessage(vcMensaje);
-            myBuild.setTitle(Html.fromHtml("<font color ='#FF0000'>" + vcTitulo +"</font>"));
-            myBuild.setPositiveButton("ACEPTAR", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
+        AlertDialog.Builder myBuild = new AlertDialog.Builder(ipcContext);
+        myBuild.setMessage(vcMensaje);
+        myBuild.setTitle(Html.fromHtml("<font color ='#FF0000'>" + vcTitulo +"</font>"));
+        myBuild.setPositiveButton("ACEPTAR", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
 
-                }
-            });
-            AlertDialog dialog = myBuild.create();
-            dialog.show();
-            return;
+            }
+        });
+        AlertDialog dialog = myBuild.create();
+        dialog.show();
+        return;
 
     }
 
@@ -233,7 +255,69 @@ public class TerminadosFragment extends Fragment {
         mRequestQueue.add(jsonObjectRequest);
     }
 
+    public void RegistraHrs(String ipcAccion, Integer ipiPedido , Integer ipiPedProv, Context ipcContextp){
 
+        getmRequestQueue();
+        String urlParams = String.format(url + "opPedPainaniDet?ipiPedido=%1$s&ipiPainani=%2$s&ipiPartida=%3$s&ipcAccion=%4$s", ipiPedido, globales.g_ctUsuario.getiPersona(),ipiPedProv, ipcAccion );
 
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.PUT, urlParams, null, new Response.Listener<JSONObject>() {
+                    @RequiresApi(api = Build.VERSION_CODES.N)
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONObject respuesta = response.getJSONObject("response");
+                            Log.i("respuesta--->", respuesta.toString());
 
+                            String Mensaje = respuesta.getString("opcError");
+                            Boolean Error = respuesta.getBoolean("oplError");
+
+                            if (Error == true) {
+                                MuestraMensaje("ERROR", Mensaje, ipcContextp);
+                                return;
+                            } else {
+                                if(ipcAccion == "Llega"){
+                                    MuestraMensaje("Aviso", "Asegurate de que los productos correspondan con el pedido", ipcContextp);
+                                }else{
+                                    MuestraMensaje("Aviso", "Hecho",ipcContextp);
+                                }
+                            }
+                        } catch (JSONException e) {
+                            MuestraMensaje("ERROR CONVERSION", "Error en la conversión de Datos. Vuelva a Intentar. " + e,ipcContextp);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO: Handle error
+                        MuestraMensaje("ERROR RESPUESTA", "No se pudo conectar con el servidor. Vuelva a Intentar. " + error.toString(),ipcContextp);
+
+                    }
+                }) {
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("ipiPedido", "ipiPedido");
+                params.put("ipiPainani", globales.g_ctUsuario.getiPersona().toString());
+                params.put("ipiPartida", "ipiPedProv");
+                params.put("ipcAccion", ipcAccion);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+        };
+        // Access the RequestQueue through your singleton class.
+       /* jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                MY_DEFAULT_TIMEOUT,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));*/
+
+        mRequestQueue.add(jsonObjectRequest);
+
+    }
 }

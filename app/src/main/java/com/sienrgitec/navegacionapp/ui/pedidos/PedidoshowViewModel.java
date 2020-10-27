@@ -1,16 +1,18 @@
-package com.sienrgitec.navegacionapp.ui.cobranza;
+package com.sienrgitec.navegacionapp.ui.pedidos;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class CobranzaViewModel extends ViewModel {
+public class PedidoshowViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public CobranzaViewModel() {
+    public PedidoshowViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is Cobranza fragment");
+        mText.setValue("This is Extras fragment");
+
+
     }
 
     public LiveData<String> getText() {

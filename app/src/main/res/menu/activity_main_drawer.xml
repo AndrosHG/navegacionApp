@@ -4,28 +4,32 @@
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
+
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_baseline_home_24"
             android:title="@string/menu_home" />
 
         <item
-            android:id="@+id/nav_slidefin"
+            android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_baseline_entrega_24"
+            android:title="@string/menu_slideshow" />
+
+        <item
+            android:id="@+id/nav_slidefin"
+            android:icon="@drawable/ic_baseline_terminados_24"
             android:title="@string/menu_slideFin" />
 
         <item
+            android:id="@+id/nav_slidecob"
+            android:icon="@drawable/ic_peligro_24"
+            android:title="@string/menu_slideCob" />
+
+
+        <!--<item
             android:id="@+id/nav_gallery"
             android:icon="@drawable/ic_baseline_entrega_24"
-            android:title="@string/menu_gallery" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_baseline_extras_24"
-            android:title="@string/menu_slideshow" />
-        <item
-            android:id="@+id/nav_slidecob"
-            android:icon="@drawable/ic_baseline_attach_money_24"
-            android:title="@string/menu_slideCob" />
+            android:title="@string/menu_gallery" /> -->
 
     </group>
 </menu>

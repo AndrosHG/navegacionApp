@@ -14,7 +14,9 @@ import android.widget.TextView;
 import com.sienrgitec.navegacionapp.R;
 import com.sienrgitec.navegacionapp.actividades.MapsActivity;
 import com.sienrgitec.navegacionapp.actividades.MuestraDet;
+import com.sienrgitec.navegacionapp.actividades.opEvaluaciones;
 import com.sienrgitec.navegacionapp.modelos.opPedPainaniDet_;
+import com.sienrgitec.navegacionapp.ui.pedidos.PedidoshowFragment;
 import com.sienrgitec.navegacionapp.ui.terminados.TerminadosFragment;
 
 public class opPedPainDetAdapter extends RVAdapter<opPedPainaniDet_> {
@@ -65,14 +67,25 @@ public class opPedPainDetAdapter extends RVAdapter<opPedPainaniDet_> {
             btnLlega.setOnClickListener(v ->{
                 btnLlega.setVisibility(View.INVISIBLE);
                 btnSalida.setVisibility(View.VISIBLE);
-                TerminadosFragment RegEntrada = new TerminadosFragment();
+                PedidoshowFragment RegEntrada = new PedidoshowFragment();
                 RegEntrada.RegistraHrs("Llega", item.getiPedido(), item.getiPartida(), contextc);
 
             });
 
             btnSalida.setOnClickListener(v ->{
-                TerminadosFragment RegEntrada = new TerminadosFragment();
+                PedidoshowFragment RegEntrada = new PedidoshowFragment();
                 RegEntrada.RegistraHrs("Sale", item.getiPedido(), item.getiPartida(), contextc);
+
+
+                Intent evalua = new Intent(getContext(), opEvaluaciones.class);
+                evalua.putExtra("ipcTipo", "Evaluacion al proveedor");
+                evalua.putExtra("ipiPedido", item.getiPedido());
+                evalua.putExtra("ipiPersona", item.getiProveedor());
+                evalua.putExtra("ipcPersona", item.getcNegocion());
+                evalua.putExtra("ipcTipoPersona", "proveedor");
+                contextc.startActivity(evalua);
+
+
             });
 
 

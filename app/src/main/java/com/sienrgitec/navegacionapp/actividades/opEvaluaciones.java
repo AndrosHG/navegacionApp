@@ -65,7 +65,7 @@ public class opEvaluaciones extends AppCompatActivity {
     public static List<ctEvaluacion> listaEvaluacion    = null;
     public static ArrayList<ctEvaluacion> listfinEvalua = new ArrayList<>();
     public static ArrayList<opClienteEvalua> opClienteEvaluaList = new ArrayList<opClienteEvalua>();
-
+    public static ArrayList<opClienteEvalua> opClienteEvaluaFinal = new ArrayList<opClienteEvalua>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -230,7 +230,7 @@ public class opEvaluaciones extends AppCompatActivity {
     public void CreaParamEvalua(Float vdeEvalua, Integer viPunto, Integer viEvalua){
 
 
-        Log.e("misparametros2---> " , vcTipo + " " + viPedido + " " + viPersona + " " + vcPersona + " " + vcTipoPersona);
+
 
         opClienteEvalua objNvaEvaluacion = new opClienteEvalua();
         objNvaEvaluacion.setiPedido(viPedido);
@@ -251,11 +251,27 @@ public class opEvaluaciones extends AppCompatActivity {
 
     /*Finaliza la Evaluación */
     public void FinalizarEvaluacion(){
-        Log.e("misparametros3---> " , vcTipo + " " + viPedido + " " + viPersona + " " + vcPersona + " " + vcTipoPersona);
 
 
         for(opClienteEvalua obj: opClienteEvaluaList){
-            obj.setiPedido(viPedido);
+
+            opClienteEvalua objNvaEvaluacion = new opClienteEvalua();
+            objNvaEvaluacion.setiPedido(viPedido);
+            objNvaEvaluacion.setiPersona(viPersona);
+            objNvaEvaluacion.setiPunto(obj.iPunto);
+            objNvaEvaluacion.setiEvalua(obj.getiEvalua());
+            objNvaEvaluacion.setiTipoPersona(0);
+            objNvaEvaluacion.setcTipo(vcTipo);
+            objNvaEvaluacion.setcValor(obj.getcValor());
+            objNvaEvaluacion.setcObs("");
+            objNvaEvaluacion.setcUsuCrea(globales.g_ctUsuario.getcUsuario());
+            objNvaEvaluacion.setDtCreado("");
+            objNvaEvaluacion.setcUsuModifica(globales.g_ctUsuario.getcUsuario());
+            objNvaEvaluacion.setDtModificado(null);
+            objNvaEvaluacion.setDtFecha(null);
+            opClienteEvaluaFinal.add(objNvaEvaluacion);
+
+
         }
 
         final ProgressDialog nDialog;
@@ -270,7 +286,7 @@ public class opEvaluaciones extends AppCompatActivity {
 
         final Gson gson = new Gson();
         String JS_opClienteEvalua = gson.toJson(
-                opClienteEvaluaList,
+                opClienteEvaluaFinal,
                 new TypeToken<ArrayList<opClienteEvalua>>() {
                 }.getType());
 

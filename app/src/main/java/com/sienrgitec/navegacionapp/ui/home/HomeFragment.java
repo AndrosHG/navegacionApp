@@ -84,7 +84,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        BuscaTareas();
+
         return root;
     }
 

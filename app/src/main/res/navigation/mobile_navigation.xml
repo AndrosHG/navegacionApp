@@ -5,17 +5,18 @@
     android:id="@+id/mobile_navigation"
     app:startDestination="@+id/nav_home">
 
+
     <fragment
         android:id="@+id/nav_home"
         android:name="com.sienrgitec.navegacionapp.ui.home.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" />
+
     <fragment
         android:id="@+id/nav_slidefin"
         android:name="com.sienrgitec.navegacionapp.ui.terminados.TerminadosFragment"
         android:label="@string/menu_slideFin"
         tools:layout="@layout/fragment_terminados" />
-
     <fragment
         android:id="@+id/nav_gallery"
         android:name="com.sienrgitec.navegacionapp.ui.gallery.GalleryFragment"
@@ -24,15 +25,15 @@
 
     <fragment
         android:id="@+id/nav_slideshow"
-        android:name="com.sienrgitec.navegacionapp.ui.slideshow.SlideshowFragment"
+        android:name="com.sienrgitec.navegacionapp.ui.pedidos.PedidoshowFragment"
         android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        tools:layout="@layout/fragment_pedidoshow" />
 
     <fragment
         android:id="@+id/nav_slidecob"
-        android:name="com.sienrgitec.navegacionapp.ui.cobranza.CobranzaFragment"
+        android:name="com.sienrgitec.navegacionapp.ui.problemas.ProblemaFragment"
         android:label="@string/menu_slideCob"
-        tools:layout="@layout/fragment_slidecob" />
+        tools:layout="@layout/fragment_problema" />
 
 
 

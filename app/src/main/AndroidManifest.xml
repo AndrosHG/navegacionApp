@@ -38,7 +38,7 @@
             android:name=".actividades.MapsActivity"
             android:label="@string/title_activity_maps" />
         <activity android:name=".ui.terminados.TerminadosFragment" />
-        <activity android:name=".ui.cobranza.CobranzaFragment" />
+        <activity android:name=".ui.problemas.ProblemaFragment" />
         <activity android:name=".actividades.Principal">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
