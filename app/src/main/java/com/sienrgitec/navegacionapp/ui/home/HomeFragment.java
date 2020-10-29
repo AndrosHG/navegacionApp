@@ -33,9 +33,14 @@ import com.google.gson.Gson;
 import com.sienrgitec.navegacionapp.R;
 import com.sienrgitec.navegacionapp.actividades.MuestraDet;
 import com.sienrgitec.navegacionapp.adaptadores.ProveedorAdapter;
+import com.sienrgitec.navegacionapp.adaptadores.opPedPainDetAdapter;
 import com.sienrgitec.navegacionapp.configuracion.Globales;
 import com.sienrgitec.navegacionapp.modelos.ctProveedor;
 import com.sienrgitec.navegacionapp.modelos.ctProveedor_;
+import com.sienrgitec.navegacionapp.modelos.opPedPainani;
+import com.sienrgitec.navegacionapp.modelos.opPedPainaniDet;
+import com.sienrgitec.navegacionapp.modelos.opPedPainaniDet_;
+import com.sienrgitec.navegacionapp.modelos.opPedidoDet;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -85,17 +90,31 @@ public class HomeFragment extends Fragment {
         });
 
 
+        BuscaTareas();
         return root;
     }
 
 
 
+
+    public void getmRequestQueue(){
+        try{
+            if (mRequestQueue == null) {
+                mRequestQueue = Volley.newRequestQueue(getContext());
+                //your code
+            }
+        }catch(Exception e){
+            Log.d("Volley",e.toString());
+        }
+    }
+
     public void BuscaTareas(){
-        getmRequestQueue();
+
+
         listafinal.clear();
+        getmRequestQueue();
 
-        String urlParams = String.format(url + "buscaProv");
-
+        String urlParams = String.format(url + "opPedPainani?ipiPainani=%1$s",  1);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, urlParams, null, new Response.Listener<JSONObject>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -111,33 +130,34 @@ public class HomeFragment extends Fragment {
 
 
                             if (Error == true) {
+
                                 return;
+
                             } else {
-                                JSONObject ds_ctProveedor = respuesta.getJSONObject("tt_ctProveedor");
-                                JSONArray  tt_ctProveedor = ds_ctProveedor.getJSONArray("tt_ctProveedor");
 
-                                globales.g_ctProvList      = Arrays.asList(new Gson().fromJson(tt_ctProveedor.toString(), ctProveedor[].class));
+                                JSONObject ds_opPedido = respuesta.getJSONObject("tt_opPedido");
+                                JSONObject ds_opPedidoDet = respuesta.getJSONObject("tt_opPedidoDet");
+                                JSONObject ds_opPedidoProv = respuesta.getJSONObject("tt_opPedidoProveedor");
+                                JSONObject ds_opPedPainani = respuesta.getJSONObject("tt_opPedPainani");
+                                JSONObject ds_opPedPainaniDet = respuesta.getJSONObject("tt_opPedPainaniDet");
+
+                                JSONArray tt_opPedidoDet  = ds_opPedidoDet.getJSONArray("tt_opPedidoDet");
+                                JSONArray tt_opPedPainani = ds_opPedPainani.getJSONArray("tt_opPedPainani");
+                                JSONArray tt_opPedPainaniDet = ds_opPedPainaniDet.getJSONArray("tt_opPedPainaniDet");
+
+                                globales.g_opPedidoDetList     = Arrays.asList(new Gson().fromJson(tt_opPedidoDet.toString(), opPedidoDet[].class));
 
 
-                                for(ctProveedor obj: globales.g_ctProvList){
-                                    ctProveedor_ pasaLista = new ctProveedor_();
-                                    Log.e("mi ubicacion--> " , obj.getDeLat().toString());
 
-                                    pasaLista.setcNegocio(obj.getcNegocio());
-                                    pasaLista.setcRazonS(obj.getcRazonS());
-                                    pasaLista.setiProveedor(obj.getiProveedor());
-                                    pasaLista.setDeLat(obj.getDeLat());
-                                    pasaLista.setDeLon(obj.getDeLon());
-                                    listafinal.add(pasaLista);
+                                if(globales.g_opPedidoDetList != null){
+                                    Log.e("HomeFragment", " tiene pedidos");
                                 }
 
-                                ProveedorAdapter adapDet = new ProveedorAdapter(getContext(),null);
-                                adapDet.setList((List<ctProveedor_>) listafinal);
-                                recycler.setAdapter(adapDet);
+
+
 
                             }
                         } catch (JSONException e) {
-
                             AlertDialog.Builder myBuild = new AlertDialog.Builder(getContext());
                             myBuild.setMessage("Error en la conversión de Datos. Vuelva a Intentar. " + e);
                             myBuild.setTitle(Html.fromHtml("<font color ='#FF0000'> ERROR CONVERSION </font>"));
@@ -145,19 +165,15 @@ public class HomeFragment extends Fragment {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.cancel();
-
                                 }
                             });
                             AlertDialog dialog = myBuild.create();
                             dialog.show();
-                            return;
                         }
                     }
                 }, new Response.ErrorListener() {
-
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
                         // TODO: Handle error
                         Log.i("Error Respuesta", error.toString());
                         AlertDialog.Builder myBuild = new AlertDialog.Builder(getContext());
@@ -176,10 +192,9 @@ public class HomeFragment extends Fragment {
             @Override
             public Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-               /* params.put("ipiProveedor","0");*/
+                params.put("ipiPainani","1");
                 return params;
             }
-
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
@@ -187,47 +202,9 @@ public class HomeFragment extends Fragment {
                 return headers;
             }
         };
-        // Access the RequestQueue through your singleton class.
-
-        jsonObjectRequest.setRetryPolicy(new RetryPolicy() {
-            @Override
-            public int getCurrentTimeout() {
-                return 20000;
-            }
-
-            @Override
-            public int getCurrentRetryCount() {
-                return 20000;
-            }
-
-            @Override
-            public void retry(VolleyError error) throws VolleyError {
-
-            }
-        });
-
         mRequestQueue.add(jsonObjectRequest);
     }
 
-    public void getmRequestQueue(){
-        try{
-            if (mRequestQueue == null) {
-                mRequestQueue = Volley.newRequestQueue(getContext());
-                //your code
-            }
-        }catch(Exception e){
-            Log.d("Volley",e.toString());
-        }
-    }
-
-    public void CargaDet(Integer viProeedor){
-        Log.e("Probando -->", "imageview--> " + viProeedor);
-        Intent intent = new Intent(getContext(), MuestraDet.class);
-        intent.putExtra("proveedor", viProeedor);
-        startActivity(intent);
-
-
-    }
 
 
 }
