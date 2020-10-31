@@ -45,6 +45,8 @@ public class CreaUbicacion extends AppCompatActivity {
     public String   URL = globales.URL;
 
 
+
+
     public void CreaRegistro(Double vdeLatitud, Double vdeLongitud,Context context){
         DecimalFormat df = new DecimalFormat("0.00000000000");
         double vdeFLatitud = Double.parseDouble(df.format(vdeLatitud));

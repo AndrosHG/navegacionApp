@@ -53,8 +53,7 @@ public class Login extends AppCompatActivity {
 
     private static RequestQueue mRequestQueue;
 
-    private static final int idNotifica = 10;
-    NotificationCompat.Builder notificacion;
+
 
 
     @Override

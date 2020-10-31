@@ -14,6 +14,7 @@ import androidx.core.app.JobIntentService;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
+import com.sienrgitec.navegacionapp.actividades.BuscarPedidos;
 import com.sienrgitec.navegacionapp.actividades.CreaUbicacion;
 import com.sienrgitec.navegacionapp.actividades.Login;
 import com.sienrgitec.navegacionapp.actividades.MainActivity;
@@ -32,6 +33,9 @@ public class BuscaUbicacionServ extends JobIntentService {
                 if(vglEjecServ == true) {
                     CreaUbicacion ubicame = new CreaUbicacion();
                     ubicame.CreaRegistro(location.getLatitude(), location.getLongitude(), context);
+
+                    BuscarPedidos busca = new BuscarPedidos();
+                    busca.BuscarPed(context);
 
                 }
             }

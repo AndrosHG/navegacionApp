@@ -24,17 +24,42 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/lista"
-        android:layout_below="@+id/text_home"
         android:layout_width="409dp"
-        android:layout_height="607dp"
+        android:layout_height="555dp"
+        android:layout_below="@+id/text_home"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_home" />
+
+    <Button
+        android:id="@+id/btnContinua"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:text="Continuar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lista"
+        app:layout_constraintVertical_bias="0.0"
+        android:visibility="invisible"/>
+
+    <Button
+        android:id="@+id/btnRechaza"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Rechazar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnContinua"
+        tools:layout_editor_absoluteY="687dp"
+        android:visibility="invisible"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

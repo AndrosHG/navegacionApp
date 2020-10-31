@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -31,9 +32,13 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.sienrgitec.navegacionapp.R;
+import com.sienrgitec.navegacionapp.actividades.Login;
+import com.sienrgitec.navegacionapp.actividades.MainActivity;
+import com.sienrgitec.navegacionapp.actividades.MapsActivity;
 import com.sienrgitec.navegacionapp.actividades.MuestraDet;
 import com.sienrgitec.navegacionapp.adaptadores.ProveedorAdapter;
 import com.sienrgitec.navegacionapp.adaptadores.opPedPainDetAdapter;
+import com.sienrgitec.navegacionapp.adaptadores.opPerfilCliAdapter;
 import com.sienrgitec.navegacionapp.configuracion.Globales;
 import com.sienrgitec.navegacionapp.modelos.ctProveedor;
 import com.sienrgitec.navegacionapp.modelos.ctProveedor_;
@@ -41,6 +46,8 @@ import com.sienrgitec.navegacionapp.modelos.opPedPainani;
 import com.sienrgitec.navegacionapp.modelos.opPedPainaniDet;
 import com.sienrgitec.navegacionapp.modelos.opPedPainaniDet_;
 import com.sienrgitec.navegacionapp.modelos.opPedidoDet;
+import com.sienrgitec.navegacionapp.modelos.opPerfilCli_;
+import com.sienrgitec.navegacionapp.ui.pedidos.PedidoshowFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -56,6 +63,7 @@ public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
     private  static RequestQueue mRequestQueue;
+    private Button btnContinuar, btnRechazar;
 
 
     public Globales globales;
@@ -64,7 +72,8 @@ public class HomeFragment extends Fragment {
 
     public static ArrayList<ctProveedor>  g_ctDetalleFinal = new ArrayList<ctProveedor>();
     public static ArrayList<ctProveedor_> listafinal       = new ArrayList<>();
-
+    public static List<opPedPainani> opPedPainaniList = null;
+    List<opPerfilCli_> opPerfilCliList = null;
 
     public RecyclerView recycler;
 
@@ -76,6 +85,8 @@ public class HomeFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
         final TextView textView = root.findViewById(R.id.text_home);
+        btnContinuar = root.findViewById(R.id.btnContinua);
+        btnRechazar  = root.findViewById(R.id.btnRechaza);
 
 
 
@@ -87,6 +98,16 @@ public class HomeFragment extends Fragment {
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
             }
+        });
+
+        btnContinuar.setOnClickListener(v ->{
+            Intent Home = new Intent(getContext(), PedidoshowFragment.class);
+            startActivity(Home);
+        });
+
+
+        btnRechazar.setOnClickListener(v ->{
+            CancelarPedido();
         });
 
 
@@ -109,7 +130,6 @@ public class HomeFragment extends Fragment {
     }
 
     public void BuscaTareas(){
-
 
         listafinal.clear();
         getmRequestQueue();
@@ -146,16 +166,23 @@ public class HomeFragment extends Fragment {
                                 JSONArray tt_opPedPainaniDet = ds_opPedPainaniDet.getJSONArray("tt_opPedPainaniDet");
 
                                 globales.g_opPedidoDetList     = Arrays.asList(new Gson().fromJson(tt_opPedidoDet.toString(), opPedidoDet[].class));
+                                opPedPainaniList               = Arrays.asList(new Gson().fromJson(tt_opPedPainani.toString(), opPedPainani[].class));
 
 
-
-                                if(globales.g_opPedidoDetList != null){
-                                    Log.e("HomeFragment", " tiene pedidos");
+                                if(opPedPainaniList != null){
+                                    if(opPedPainaniList.get(0).getlContestado().equals(false)){
+                                        Log.e("HomeFragment", " tiene un nuevo pedido, deseas aceptar?");
+                                        btnContinuar.setVisibility(View.VISIBLE);
+                                        btnRechazar.setVisibility(View.VISIBLE);
+                                        BuscarCli();
+                                    }else{
+                                        if (opPedPainaniList.get(0).getlAceptado().equals(true)){
+                                            Log.e("HomeFragment", " tiene un nuevo pedido por concluir, ve a la seccion de Pedidos Pendientes");
+                                        }
+                                    }
+                                }else {
+                                    Log.e("HomeFragment","No tienes pedidos asignados");
                                 }
-
-
-
-
                             }
                         } catch (JSONException e) {
                             AlertDialog.Builder myBuild = new AlertDialog.Builder(getContext());
@@ -205,6 +232,126 @@ public class HomeFragment extends Fragment {
         mRequestQueue.add(jsonObjectRequest);
     }
 
+    public void BuscarCli(){
+
+        getmRequestQueue();
+        String urlParams = String.format(url + "perfilCli?ipiPedido=%1$s&ipiCliente=%2$s",  opPedPainaniList.get(0).getiPedido(), opPedPainaniList.get(0).getiCliente());
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, urlParams, null, new Response.Listener<JSONObject>() {
+                    @RequiresApi(api = Build.VERSION_CODES.N)
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONObject respuesta = response.getJSONObject("response");
+                            Log.i("respuesta--->", respuesta.toString());
+                            String Mensaje = respuesta.getString("opcError");
+                            Boolean Error = respuesta.getBoolean("oplError");
+
+                            if (Error == true) {
+
+                                //MuestraMensaje("Aviso", Mensaje);
+                                return;
+
+                            } else {
+                                JSONObject ds_perfil = respuesta.getJSONObject("ttPerfilCli");
+                                JSONArray ttPerfilCli = ds_perfil.getJSONArray("ttPerfilCli");
+                                opPerfilCliList = Arrays.asList(new Gson().fromJson(ttPerfilCli.toString(), opPerfilCli_[].class));
 
 
+                                opPerfilCliAdapter adapDet = new opPerfilCliAdapter(getContext(),null);
+                                adapDet.setList((List<opPerfilCli_>) opPerfilCliList);
+                                recycler.setAdapter(adapDet);
+
+
+
+
+
+
+                            }
+                        } catch (JSONException e) {
+
+                            AlertDialog.Builder myBuild = new AlertDialog.Builder(getContext());
+                            myBuild.setMessage("Error en la conversión de Datos. Vuelva a Intentar. " + e);
+                            myBuild.setTitle(Html.fromHtml("<font color ='#FF0000'> ERROR CONVERSION </font>"));
+                            myBuild.setPositiveButton("ACEPTAR", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+
+                                }
+                            });
+                            AlertDialog dialog = myBuild.create();
+                            dialog.show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        // TODO: Handle error
+                        Log.i("Error Respuesta", error.toString());
+                        AlertDialog.Builder myBuild = new AlertDialog.Builder(getContext());
+                        myBuild.setMessage("No se pudo conectar con el servidor. Vuelva a Intentar. " + error.toString());
+                        myBuild.setTitle(Html.fromHtml("<font color ='#FF0000'> ERROR RESPUESTA </font>"));
+                        myBuild.setPositiveButton("ACEPTAR", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                dialog.cancel();
+                            }
+                        });
+                        AlertDialog dialog = myBuild.create();
+                        dialog.show();
+                    }
+                }) {
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("ipiPedido",opPedPainaniList.get(0).getiPedido().toString());
+                params.put("ipiCliente",opPedPainaniList.get(0).getiCliente().toString());
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+        };
+        // Access the RequestQueue through your singleton class.
+
+        jsonObjectRequest.setRetryPolicy(new RetryPolicy() {
+            @Override
+            public int getCurrentTimeout() {
+                return 20000;
+            }
+
+            @Override
+            public int getCurrentRetryCount() {
+                return 20000;
+            }
+
+            @Override
+            public void retry(VolleyError error) throws VolleyError {
+
+            }
+        });
+        mRequestQueue.add(jsonObjectRequest);
+
+    }
+
+    public void CancelarPedido(){
+
+    }
 }
+
+/*
+*
+*
+*
+*
+*
+*
+* */
