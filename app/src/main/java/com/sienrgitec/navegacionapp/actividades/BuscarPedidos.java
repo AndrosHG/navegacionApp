@@ -22,29 +22,18 @@ public class BuscarPedidos extends Activity {
     public void BuscarPed(Context vcContext){
         Log.e("BuscarPedidos", "inicio");
 
-
-        Vibrator vibrator = (Vibrator)vcContext.getSystemService(vcContext.VIBRATOR_SERVICE);
+        NotificationManager nm = (NotificationManager) vcContext.getSystemService(vcContext.NOTIFICATION_SERVICE);
+        Vibrator vibrator      = (Vibrator)            vcContext.getSystemService(vcContext.VIBRATOR_SERVICE);
+        nm.notify(idUnica,notificacion.build());
         vibrator.vibrate(3000);
 
-
-
-/*        notificacion.setTicker("Nuevo pedido");
-        notificacion.setWhen(System.currentTimeMillis());
-        notificacion.setContentTitle("Nuevo Pedido");
-        notificacion.setContentText("tienes un nuevo pedido ");*/
-
-
         Intent intent = new Intent(vcContext,Login.class);
-
         PendingIntent pendingIntent = PendingIntent.getActivity(vcContext,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
         notificacion.setContentIntent(pendingIntent);
-        ///sonidos
-
-        NotificationManager nm = (NotificationManager) getSystemService(vcContext.NOTIFICATION_SERVICE);
-
-        nm.notify(idUnica,notificacion.build());
-
-
+        notificacion.setTicker("Nuevo pedido");
+        notificacion.setWhen(System.currentTimeMillis());
+        notificacion.setContentTitle("Nuevo Pedido");
+        notificacion.setContentText("tienes un nuevo pedido ");
     }
 
 }
