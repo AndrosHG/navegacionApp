@@ -4,8 +4,11 @@ import com.sienrgitec.navegacionapp.modelos.ctDomicilio;
 import com.sienrgitec.navegacionapp.modelos.ctPainani;
 import com.sienrgitec.navegacionapp.modelos.ctProveedor;
 import com.sienrgitec.navegacionapp.modelos.ctUsuario;
+import com.sienrgitec.navegacionapp.modelos.opPedPainani;
 import com.sienrgitec.navegacionapp.modelos.opPedPainaniDet;
+import com.sienrgitec.navegacionapp.modelos.opPedido;
 import com.sienrgitec.navegacionapp.modelos.opPedidoDet;
+import com.sienrgitec.navegacionapp.modelos.opPedidoProv;
 import com.sienrgitec.navegacionapp.modelos.opUbicaPainani;
 
 import java.util.ArrayList;
@@ -19,6 +22,7 @@ public class Globales {
     public static Integer vgiSucursal = 1;
 
     public static Boolean vglEjecServ = true;
+    public static Boolean vglBuscaPed = true;
 
     public static ctUsuario g_ctUsuario = null;
     public static ctPainani g_ctPainani = null;
@@ -35,5 +39,21 @@ public class Globales {
 
     public static ArrayList<opUbicaPainani> opUbicacionList  = new ArrayList<>();
     public static List<opPedPainaniDet> g_ctPedPainaniDetList = null;
+
+
+
+
+
+
+    /***/
+    public static List<opPedido>        g_opPedidoList = null;
+    public static List<opPedidoDet>     g_opPedDetList  = null;
+    public static List<opPedidoProv>    g_opPedProvList = null;
+    public static List<opPedPainani>    g_opPedPainani  = null;
+    public static List<opPedPainaniDet> g_opPedPainaniDetList = null;
+
+
+    /***/
+    public static ArrayList<opPedPainani>   opPedPainaniList    = new ArrayList<>();
 
 }

@@ -11,7 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:textAlignment="center"
         android:textSize="20sp"
@@ -40,26 +39,19 @@
         android:id="@+id/btnContinua"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:text="Continuar"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lista"
-        app:layout_constraintVertical_bias="0.0"
-        android:visibility="invisible"/>
+        app:layout_constraintTop_toBottomOf="@+id/lista" />
 
     <Button
         android:id="@+id/btnRechaza"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_marginLeft="6dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:text="Rechazar"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btnContinua"
-        tools:layout_editor_absoluteY="687dp"
-        android:visibility="invisible"/>
+        app:layout_constraintTop_toBottomOf="@+id/lista" />
 </androidx.constraintlayout.widget.ConstraintLayout>

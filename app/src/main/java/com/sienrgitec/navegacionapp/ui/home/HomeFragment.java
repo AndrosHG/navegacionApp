@@ -1,5 +1,6 @@
 package com.sienrgitec.navegacionapp.ui.home;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,6 +33,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.sienrgitec.navegacionapp.R;
 import com.sienrgitec.navegacionapp.actividades.Login;
 import com.sienrgitec.navegacionapp.actividades.MainActivity;
@@ -70,9 +73,7 @@ public class HomeFragment extends Fragment {
     public String   url = globales.URL;
 
 
-    public static ArrayList<ctProveedor>  g_ctDetalleFinal = new ArrayList<ctProveedor>();
-    public static ArrayList<ctProveedor_> listafinal       = new ArrayList<>();
-    public static List<opPedPainani> opPedPainaniList = null;
+
     List<opPerfilCli_> opPerfilCliList = null;
 
     public RecyclerView recycler;
@@ -111,7 +112,35 @@ public class HomeFragment extends Fragment {
         });
 
 
-        BuscaTareas();
+
+        if(globales.g_opPedPainani.size() >= 1){
+            Log.e("iniciando home---> ", "no tienes pedido");
+        }else{
+            final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setCancelable(true);
+            builder.setTitle(Html.fromHtml("<font color ='#FF0000'> Tienes un nuevo pedido </font>"));
+            builder.setMessage("¿Aceptar Pedido?");
+            builder.setPositiveButton("Si",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ActualizaPedido(true);
+
+                        }
+                    });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ActualizaPedido(false);
+
+                }
+            });
+
+            final AlertDialog alert = builder.create();
+            alert.show();
+        }
+
+        //BuscaTareas();
         return root;
     }
 
@@ -129,113 +158,23 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    public void BuscaTareas(){
-
-        listafinal.clear();
-        getmRequestQueue();
-
-        String urlParams = String.format(url + "opPedPainani?ipiPainani=%1$s",  1);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.GET, urlParams, null, new Response.Listener<JSONObject>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-
-                            JSONObject respuesta = response.getJSONObject("response");
-                            Log.i("respuesta--->", respuesta.toString());
-
-                            String Mensaje = respuesta.getString("opcError");
-                            Boolean Error = respuesta.getBoolean("oplError");
 
 
-                            if (Error == true) {
-
-                                return;
-
-                            } else {
-
-                                JSONObject ds_opPedido = respuesta.getJSONObject("tt_opPedido");
-                                JSONObject ds_opPedidoDet = respuesta.getJSONObject("tt_opPedidoDet");
-                                JSONObject ds_opPedidoProv = respuesta.getJSONObject("tt_opPedidoProveedor");
-                                JSONObject ds_opPedPainani = respuesta.getJSONObject("tt_opPedPainani");
-                                JSONObject ds_opPedPainaniDet = respuesta.getJSONObject("tt_opPedPainaniDet");
-
-                                JSONArray tt_opPedidoDet  = ds_opPedidoDet.getJSONArray("tt_opPedidoDet");
-                                JSONArray tt_opPedPainani = ds_opPedPainani.getJSONArray("tt_opPedPainani");
-                                JSONArray tt_opPedPainaniDet = ds_opPedPainaniDet.getJSONArray("tt_opPedPainaniDet");
-
-                                globales.g_opPedidoDetList     = Arrays.asList(new Gson().fromJson(tt_opPedidoDet.toString(), opPedidoDet[].class));
-                                opPedPainaniList               = Arrays.asList(new Gson().fromJson(tt_opPedPainani.toString(), opPedPainani[].class));
+    public void ActualizaPedido(Boolean vlAcetpado){
+        Log.e("mi Respuesta es-->" , " vlAceptado= " + vlAcetpado);
 
 
-                                if(opPedPainaniList != null){
-                                    if(opPedPainaniList.get(0).getlContestado().equals(false)){
-                                        Log.e("HomeFragment", " tiene un nuevo pedido, deseas aceptar?");
-                                        btnContinuar.setVisibility(View.VISIBLE);
-                                        btnRechazar.setVisibility(View.VISIBLE);
-                                        BuscarCli();
-                                    }else{
-                                        if (opPedPainaniList.get(0).getlAceptado().equals(true)){
-                                            Log.e("HomeFragment", " tiene un nuevo pedido por concluir, ve a la seccion de Pedidos Pendientes");
-                                        }
-                                    }
-                                }else {
-                                    Log.e("HomeFragment","No tienes pedidos asignados");
-                                }
-                            }
-                        } catch (JSONException e) {
-                            AlertDialog.Builder myBuild = new AlertDialog.Builder(getContext());
-                            myBuild.setMessage("Error en la conversión de Datos. Vuelva a Intentar. " + e);
-                            myBuild.setTitle(Html.fromHtml("<font color ='#FF0000'> ERROR CONVERSION </font>"));
-                            myBuild.setPositiveButton("ACEPTAR", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.cancel();
-                                }
-                            });
-                            AlertDialog dialog = myBuild.create();
-                            dialog.show();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // TODO: Handle error
-                        Log.i("Error Respuesta", error.toString());
-                        AlertDialog.Builder myBuild = new AlertDialog.Builder(getContext());
-                        myBuild.setMessage("No se pudo conectar con el servidor. Vuelva a Intentar. " + error.toString());
-                        myBuild.setTitle(Html.fromHtml("<font color ='#FF0000'> ERROR RESPUESTA </font>"));
-                        myBuild.setPositiveButton("ACEPTAR", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        });
-                        AlertDialog dialog = myBuild.create();
-                        dialog.show();
-                    }
-                }) {
-            @Override
-            public Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("ipiPainani","1");
-                return params;
-            }
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Content-Type", "application/json; charset=utf-8");
-                return headers;
-            }
-        };
-        mRequestQueue.add(jsonObjectRequest);
+       if(vlAcetpado == true){
+           BuscarCli();
+           btnRechazar.setVisibility(View.VISIBLE);
+           btnContinuar.setVisibility(View.VISIBLE);
+       }
+
     }
 
     public void BuscarCli(){
-
         getmRequestQueue();
-        String urlParams = String.format(url + "perfilCli?ipiPedido=%1$s&ipiCliente=%2$s",  opPedPainaniList.get(0).getiPedido(), opPedPainaniList.get(0).getiCliente());
+        String urlParams = String.format(url + "perfilCli?ipiPedido=%1$s&ipiCliente=%2$s", 403, 130 ); //globales.g_opPedPainani.get(0).getiPedido(), globales.g_opPedPainani.get(0).getiCliente()
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, urlParams, null, new Response.Listener<JSONObject>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -261,27 +200,10 @@ public class HomeFragment extends Fragment {
                                 opPerfilCliAdapter adapDet = new opPerfilCliAdapter(getContext(),null);
                                 adapDet.setList((List<opPerfilCli_>) opPerfilCliList);
                                 recycler.setAdapter(adapDet);
-
-
-
-
-
-
                             }
                         } catch (JSONException e) {
+                            Toast.makeText(getContext(), "Error conversión de Datos: " +  e, Toast.LENGTH_SHORT).show();
 
-                            AlertDialog.Builder myBuild = new AlertDialog.Builder(getContext());
-                            myBuild.setMessage("Error en la conversión de Datos. Vuelva a Intentar. " + e);
-                            myBuild.setTitle(Html.fromHtml("<font color ='#FF0000'> ERROR CONVERSION </font>"));
-                            myBuild.setPositiveButton("ACEPTAR", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.cancel();
-
-                                }
-                            });
-                            AlertDialog dialog = myBuild.create();
-                            dialog.show();
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -291,25 +213,14 @@ public class HomeFragment extends Fragment {
 
                         // TODO: Handle error
                         Log.i("Error Respuesta", error.toString());
-                        AlertDialog.Builder myBuild = new AlertDialog.Builder(getContext());
-                        myBuild.setMessage("No se pudo conectar con el servidor. Vuelva a Intentar. " + error.toString());
-                        myBuild.setTitle(Html.fromHtml("<font color ='#FF0000'> ERROR RESPUESTA </font>"));
-                        myBuild.setPositiveButton("ACEPTAR", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                dialog.cancel();
-                            }
-                        });
-                        AlertDialog dialog = myBuild.create();
-                        dialog.show();
+                        Toast.makeText(getContext(), "Error conectar con el servidor: " +  error.toString(), Toast.LENGTH_SHORT).show();
                     }
                 }) {
             @Override
             public Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("ipiPedido",opPedPainaniList.get(0).getiPedido().toString());
-                params.put("ipiCliente",opPedPainaniList.get(0).getiCliente().toString());
+                params.put("ipiPedido",   "403" );// globales.g_opPedPainani.get(0).getiPedido().toString());
+                params.put("ipiCliente","130" ); //globales.g_opPedPainani.get(0).getiCliente().toString());
                 return params;
             }
 

@@ -20,6 +20,7 @@ import com.sienrgitec.navegacionapp.actividades.Login;
 import com.sienrgitec.navegacionapp.actividades.MainActivity;
 import com.sienrgitec.navegacionapp.configuracion.Globales;
 
+import static com.sienrgitec.navegacionapp.configuracion.Globales.vglBuscaPed;
 import static com.sienrgitec.navegacionapp.configuracion.Globales.vglEjecServ;
 
 public class BuscaUbicacionServ extends JobIntentService {
@@ -34,8 +35,10 @@ public class BuscaUbicacionServ extends JobIntentService {
                     CreaUbicacion ubicame = new CreaUbicacion();
                     ubicame.CreaRegistro(location.getLatitude(), location.getLongitude(), context);
 
-                    BuscarPedidos busca = new BuscarPedidos();
-                    busca.BuscarPed(context);
+                    if(vglBuscaPed == true) {
+                        BuscarPedidos busca = new BuscarPedidos();
+                        busca.BuscarPed(context);
+                    }
 
                 }
             }
