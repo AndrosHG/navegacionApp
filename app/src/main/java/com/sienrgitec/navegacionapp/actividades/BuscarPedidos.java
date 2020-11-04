@@ -117,9 +117,7 @@ public class BuscarPedidos extends Activity {
 
 
 
-
-
-                                if(vlTienePed == false){
+                                if(vlTienePed == true){
                                     globales.vglBuscaPed = false;
 
                                     Vibrator vibrator      = (Vibrator)            vcContext.getSystemService(vcContext.VIBRATOR_SERVICE);

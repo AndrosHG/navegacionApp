@@ -78,8 +78,7 @@ public class HomeFragment extends Fragment {
         btnContinuar = root.findViewById(R.id.btnContinua);
         btnRechazar  = root.findViewById(R.id.btnRechaza);
 
-
-
+        
         recycler      = (RecyclerView) root.findViewById(R.id.lista);
         recycler.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
 
@@ -101,7 +100,7 @@ public class HomeFragment extends Fragment {
         });
 
 
-        if(globales.g_opPedPainani.size() >= 1){
+        if(globales.g_opPedPainani.size() == 0){
             Log.e("iniciando home---> ", "no tienes pedido");
         }else{
             final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());

@@ -52,6 +52,9 @@ public class CreaUbicacion extends AppCompatActivity {
         double vdeFLatitud = Double.parseDouble(df.format(vdeLatitud));
         double vdeFLongitud = Double.parseDouble(df.format(vdeLongitud));
 
+        globales.vg_deLatitud  = vdeLatitud;
+        globales.vg_deLongitud = vdeLongitud;
+
 
         final ProgressDialog nDialog;
         nDialog = new ProgressDialog(context);

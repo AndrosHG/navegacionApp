@@ -24,7 +24,7 @@ import static com.sienrgitec.navegacionapp.configuracion.Globales.vglBuscaPed;
 import static com.sienrgitec.navegacionapp.configuracion.Globales.vglEjecServ;
 
 public class BuscaUbicacionServ extends JobIntentService {
-    //private Globales globales;
+
 
     public static final int JOB_ID = 1;
     public static void enqueueWork(final Context context, Intent work) {
@@ -32,6 +32,7 @@ public class BuscaUbicacionServ extends JobIntentService {
         LocationListener locationListener= new LocationListener(){
             public void onLocationChanged(Location location){
                 if(vglEjecServ == true) {
+
                     CreaUbicacion ubicame = new CreaUbicacion();
                     ubicame.CreaRegistro(location.getLatitude(), location.getLongitude(), context);
 

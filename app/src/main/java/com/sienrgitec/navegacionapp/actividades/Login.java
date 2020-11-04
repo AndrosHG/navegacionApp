@@ -32,6 +32,7 @@ import com.sienrgitec.navegacionapp.R;
 import com.sienrgitec.navegacionapp.configuracion.Globales;
 import com.sienrgitec.navegacionapp.modelos.ctPainani;
 import com.sienrgitec.navegacionapp.modelos.ctUsuario;
+import com.sienrgitec.navegacionapp.modelos.opDispPainani;
 import com.sienrgitec.navegacionapp.servicios.BuscaUbicacionServ;
 
 import org.json.JSONArray;
@@ -54,8 +55,6 @@ public class Login extends AppCompatActivity {
     private static RequestQueue mRequestQueue;
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +66,14 @@ public class Login extends AppCompatActivity {
 
         btnEntrar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Entrar();
+
+                Toast.makeText(Login.this, "Obteniendo ubicación, Espera un Momento" + globales.vg_deLongitud, Toast.LENGTH_SHORT).show();
+
+                if(globales.vg_deLatitud == 0){
+                    Toast.makeText(Login.this, "Obteniendo ubicación, Espera un Momento", Toast.LENGTH_SHORT).show();
+                }else{
+                    Entrar();
+                }
             }
         });
 
@@ -129,7 +135,8 @@ public class Login extends AppCompatActivity {
 
         getmRequestQueue();
 
-        String urlParams = String.format(url + "CargaTitlani?ipcUsuario=%1$s&ipcPassword=%2$s", vcUsuLog, password);
+        String urlParams = String.format(url + "CargaTitlani?ipcUsuario=%1$s&ipcPassword=%2$s&ipdeLatitud=%3$s&ipdeLongitud=%4$s",
+                vcUsuLog, password, globales.vg_deLatitud, globales.vg_deLongitud);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, urlParams, null, new Response.Listener<JSONObject>() {
@@ -143,16 +150,21 @@ public class Login extends AppCompatActivity {
 
                             String Mensaje = respuesta.getString("opcError");
                             Boolean Error = respuesta.getBoolean("oplError");
+                            Boolean vlInicio = respuesta.getBoolean("oplInicio");
+
                             JSONObject ds_ctPainani = respuesta.getJSONObject("tt_ctPainani");
                             JSONObject ds_ctUsuario = respuesta.getJSONObject("tt_ctUsuario");
+                            JSONObject ds_opdispPainani   = respuesta.getJSONObject("tt_opDispPainani");
 
 
                             JSONArray tt_ctUsuario = ds_ctUsuario.getJSONArray("tt_ctUsuario");
                             JSONArray tt_ctPainani = ds_ctPainani.getJSONArray("tt_ctPainani");
+                            JSONArray tt_opDispPainani = ds_opdispPainani.getJSONArray("tt_opDispPainani");
 
 
                             globales.g_ctUsuarioList = Arrays.asList(new Gson().fromJson(tt_ctUsuario.toString(), ctUsuario[].class));
                             globales.g_ctPainaniList = Arrays.asList(new Gson().fromJson(tt_ctPainani.toString(), ctPainani[].class));
+                            globales.g_opDispPList   = Arrays.asList(new Gson().fromJson(tt_opDispPainani.toString(), opDispPainani[].class));
 
                             if (Error == true) {
                                 btnEntrar.setEnabled(true);
@@ -163,25 +175,18 @@ public class Login extends AppCompatActivity {
                                 globales.g_ctUsuario = globales.g_ctUsuarioList.get(0);
                                 globales.g_ctPainani = globales.g_ctPainaniList.get(0);
 
-                                    Intent Home = new Intent(Login.this, Aportacion.class);
-                                    startActivity(Home);
+                                if(vlInicio == true){
+                                    startActivity(new Intent(Login.this, Aportacion.class));
                                     finish();
-
+                                }else {
+                                    startActivity(new Intent(Login.this, MainActivity.class));
+                                    finish();
+                                }
                             }
                         } catch (JSONException e) {
                             btnEntrar.setEnabled(true);
-                            AlertDialog.Builder myBuild = new AlertDialog.Builder(Login.this);
-                            myBuild.setMessage("Error en la conversión de Datos. Vuelva a Intentar. " + e);
-                            myBuild.setTitle(Html.fromHtml("<font color ='#FF0000'> ERROR CONVERSION </font>"));
-                            myBuild.setPositiveButton("ACEPTAR", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.cancel();
-
-                                }
-                            });
-                            AlertDialog dialog = myBuild.create();
-                            dialog.show();
+                            Toast.makeText(Login.this, "Error en la conversión de Datos. ", Toast.LENGTH_SHORT).show();
+                            return;
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -189,20 +194,9 @@ public class Login extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         btnEntrar.setEnabled(true);
-                        // TODO: Handle error
-                        Log.i("Error Respuesta", error.toString());
-                        AlertDialog.Builder myBuild = new AlertDialog.Builder(Login.this);
-                        myBuild.setMessage("No se pudo conectar con el servidor. Vuelva a Intentar. " + error.toString());
-                        myBuild.setTitle(Html.fromHtml("<font color ='#FF0000'> ERROR RESPUESTA </font>"));
-                        myBuild.setPositiveButton("ACEPTAR", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        });
+                        Toast.makeText(Login.this, "No se pudo conectar con el servidor: " + error.toString(), Toast.LENGTH_SHORT).show();
+                        return;
 
-                        AlertDialog dialog = myBuild.create();
-                        dialog.show();
                     }
                 }) {
             @Override
@@ -210,7 +204,8 @@ public class Login extends AppCompatActivity {
                 Map<String, String> params = new HashMap<>();
                 params.put("ipcUsuario", vcUsuLog);
                 params.put("ipcPassword", password);
-
+                params.put("ipdeLatitud",globales.vg_deLatitud.toString());
+                params.put("ipdeLongitud",globales.vg_deLongitud.toString());
                 return params;
             }
 

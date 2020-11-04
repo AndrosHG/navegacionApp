@@ -57,7 +57,6 @@ public class Aportacion extends AppCompatActivity {
     public static ArrayList<opDispPainani>  opDispPainani       = new ArrayList<>();
 
     public RecyclerView recyclerCom, recyclerVehiculo;
-
     public Button btnGuardar;
 
 
@@ -83,10 +82,7 @@ public class Aportacion extends AppCompatActivity {
         CargaComisiones();
         CargaVehiculos();
     }
-
-
-    public void getmRequestQueue()
-    {
+    public void getmRequestQueue()    {
         try{
             if (mRequestQueue == null) {
                 mRequestQueue = Volley.newRequestQueue(Aportacion.this);
@@ -96,7 +92,6 @@ public class Aportacion extends AppCompatActivity {
             Log.d("Volley",e.toString());
         }
     }
-
     public void CargaComisiones(){
         listctComisionFinal.clear();
         getmRequestQueue();
@@ -246,11 +241,6 @@ public class Aportacion extends AppCompatActivity {
             return;
         }
 
-
-
-
-
-
         final ProgressDialog nDialog;
         nDialog = new ProgressDialog(Aportacion.this);
         nDialog.setMessage("Cargando...");
@@ -259,15 +249,15 @@ public class Aportacion extends AppCompatActivity {
 
         opDispPainani objComisionDispP = new opDispPainani();
         objComisionDispP.setiPainani(globales.g_ctUsuario.getiPersona());
-        objComisionDispP.setDtFecha(null);
+        objComisionDispP.setDtFecha(globales.g_opDispPList.get(0).getDtFecha());
         objComisionDispP.setiComision(globales.vgiComision);
-        objComisionDispP.setDtCheckIn(null);
-        objComisionDispP.setiCheckIn(0);
-        objComisionDispP.setDtCheckOut(null);
-        objComisionDispP.setiCheckOut(0);
-        objComisionDispP.setiEstadoProceso(1);
-        objComisionDispP.setDeUltLat(0.0);
-        objComisionDispP.setDeUltLong(0.0);
+        objComisionDispP.setDtCheckIn(globales.g_opDispPList.get(0).getDtCheckIn());
+        objComisionDispP.setiCheckIn(globales.g_opDispPList.get(0).getiCheckIn());
+        objComisionDispP.setDtCheckOut(globales.g_opDispPList.get(0).getDtCheckOut());
+        objComisionDispP.setiCheckOut(globales.g_opDispPList.get(0).getiCheckOut());
+        objComisionDispP.setiEstadoProceso(globales.g_opDispPList.get(0).getiEstadoProceso());
+        objComisionDispP.setDeUltLat(globales.vg_deLatitud);
+        objComisionDispP.setDeUltLong(globales.vg_deLongitud);
         objComisionDispP.setiVehiculo(globales.vgiVehiculo);
 
         opDispPainani.add(objComisionDispP);

@@ -4,6 +4,7 @@ import com.sienrgitec.navegacionapp.modelos.ctDomicilio;
 import com.sienrgitec.navegacionapp.modelos.ctPainani;
 import com.sienrgitec.navegacionapp.modelos.ctProveedor;
 import com.sienrgitec.navegacionapp.modelos.ctUsuario;
+import com.sienrgitec.navegacionapp.modelos.opDispPainani;
 import com.sienrgitec.navegacionapp.modelos.opPausaPainani;
 import com.sienrgitec.navegacionapp.modelos.opPedPainani;
 import com.sienrgitec.navegacionapp.modelos.opPedPainaniDet;
@@ -26,6 +27,7 @@ public class Globales {
     public static Boolean vglBuscaPed = true;
     public static Integer vgiComision = 0;
     public static Integer vgiVehiculo = 0;
+    public static Double  vg_deLongitud, vg_deLatitud;
 
 
     public static ctUsuario g_ctUsuario = null;
@@ -51,6 +53,7 @@ public class Globales {
     public static List<opPedidoProv>    g_opPedProvList = null;
     public static List<opPedPainani>    g_opPedPainani  = null;
     public static List<opPedPainaniDet> g_opPedPainaniDetList = null;
+    public static List<opDispPainani>   g_opDispPList         = null;
 
 
     /***/
