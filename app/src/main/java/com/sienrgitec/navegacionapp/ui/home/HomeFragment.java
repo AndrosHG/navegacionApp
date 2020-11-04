@@ -1,6 +1,5 @@
 package com.sienrgitec.navegacionapp.ui.home;
 
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -35,20 +34,10 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.sienrgitec.navegacionapp.R;
-import com.sienrgitec.navegacionapp.actividades.Login;
-import com.sienrgitec.navegacionapp.actividades.MainActivity;
-import com.sienrgitec.navegacionapp.actividades.MapsActivity;
-import com.sienrgitec.navegacionapp.actividades.MuestraDet;
-import com.sienrgitec.navegacionapp.adaptadores.ProveedorAdapter;
-import com.sienrgitec.navegacionapp.adaptadores.opPedPainDetAdapter;
+import com.sienrgitec.navegacionapp.actividades.MotivosCancela;
 import com.sienrgitec.navegacionapp.adaptadores.opPerfilCliAdapter;
 import com.sienrgitec.navegacionapp.configuracion.Globales;
-import com.sienrgitec.navegacionapp.modelos.ctProveedor;
-import com.sienrgitec.navegacionapp.modelos.ctProveedor_;
 import com.sienrgitec.navegacionapp.modelos.opPedPainani;
-import com.sienrgitec.navegacionapp.modelos.opPedPainaniDet;
-import com.sienrgitec.navegacionapp.modelos.opPedPainaniDet_;
-import com.sienrgitec.navegacionapp.modelos.opPedidoDet;
 import com.sienrgitec.navegacionapp.modelos.opPerfilCli_;
 import com.sienrgitec.navegacionapp.ui.pedidos.PedidoshowFragment;
 
@@ -112,7 +101,6 @@ public class HomeFragment extends Fragment {
         });
 
 
-
         if(globales.g_opPedPainani.size() >= 1){
             Log.e("iniciando home---> ", "no tienes pedido");
         }else{
@@ -144,9 +132,6 @@ public class HomeFragment extends Fragment {
         return root;
     }
 
-
-
-
     public void getmRequestQueue(){
         try{
             if (mRequestQueue == null) {
@@ -158,18 +143,120 @@ public class HomeFragment extends Fragment {
         }
     }
 
-
-
     public void ActualizaPedido(Boolean vlAcetpado){
         Log.e("mi Respuesta es-->" , " vlAceptado= " + vlAcetpado);
 
 
-       if(vlAcetpado == true){
-           BuscarCli();
-           btnRechazar.setVisibility(View.VISIBLE);
-           btnContinuar.setVisibility(View.VISIBLE);
-       }
+        globales.opPedPainaniList.clear();
+        opPedPainani objActualizaPed  = new opPedPainani();
+        objActualizaPed.setcCvePedido  ("globales.g_opPedPainani.get(0).getcCvePedido()");
+        /*objActualizaPed.setcDirCliente (globales.g_opPedPainani.get(0).getcDirCliente());
+        objActualizaPed.setDtAvisado   (globales.g_opPedPainani.get(0).getDtAvisado());
+        objActualizaPed.setDtContestado(globales.g_opPedPainani.get(0).getDtContestado());
+        objActualizaPed.setDtFecha     (globales.g_opPedPainani.get(0).getDtFecha());
+        objActualizaPed.setDtReasignado(globales.g_opPedPainani.get(0).getDtReasignado());
+        objActualizaPed.setiAsignadoA  (globales.g_opPedPainani.get(0).getiAsignadoA());
+        objActualizaPed.setiCliente    (globales.g_opPedPainani.get(0).getiCliente());
+        objActualizaPed.setiPainani    (globales.g_opPedPainani.get(0).getiPainani());  //
+        objActualizaPed.setiPedido     (globales.g_opPedPainani.get(0).getiPedido()); //
+        objActualizaPed.setlAceptado   (vlAcetpado);
+        objActualizaPed.setlContestado (true);
+        objActualizaPed.setlReasignado (false);*/
 
+        globales.opPedPainaniList.add(objActualizaPed);
+
+        JSONObject jsonBody = new JSONObject();
+        JSONObject jsonParams = new JSONObject();
+        JSONObject jsonDataSet = new JSONObject();
+
+        final Gson gson = new Gson();
+        String JS_opPedPainani = gson.toJson(
+                globales.opPedPainaniList,
+                new TypeToken<ArrayList<opPedPainani>>() {
+                }.getType());
+        try {
+            JSONArray opPedPainaniJS   = new JSONArray(JS_opPedPainani);
+            jsonDataSet.put("tt_opPedPainani",  opPedPainaniJS);
+            jsonParams.put("ds_opPedido", jsonDataSet);
+            jsonBody.put("request", jsonParams);
+            Log.i("Response", jsonBody.toString());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(getContext(), "Error conectar con el servidor: " +  e.getMessage(), Toast.LENGTH_SHORT).show();
+
+        }
+
+        getmRequestQueue();
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.PUT, url + "opPedPainani/", jsonBody, new Response.Listener<JSONObject>() {
+                    @RequiresApi(api = Build.VERSION_CODES.N)
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONObject respuesta = response.getJSONObject("response");
+                            Log.i("respuesta resrt->", "mensaje: " + respuesta.toString());
+
+                            Boolean Error = respuesta.getBoolean("oplError");
+                            String Mensaje = respuesta.getString("opcError");
+
+                            JSONObject ds_opPedido          = respuesta.getJSONObject("tt_opPedido");
+                            JSONObject ds_opPedidoProveedor = respuesta.getJSONObject("tt_opPedidoProveedor");
+                            JSONObject ds_opPedidoDet       = respuesta.getJSONObject("tt_opPedidoDet");
+
+
+                            if (Error == true) {
+                                Toast.makeText(getContext(), "Error conectar con el servidor: " +  Mensaje, Toast.LENGTH_SHORT).show();
+                            } else {
+                                if (vlAcetpado == false){
+
+                                }else{
+                                    BuscarCli();
+                                    btnRechazar.setVisibility(View.VISIBLE);
+                                    btnContinuar.setVisibility(View.VISIBLE);
+                                }
+                            }
+                        } catch (JSONException e) {
+                            Toast.makeText(getContext(), "Error conectar con el servidor: " +  e.getMessage(), Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO: Handle error
+                        Log.i("Error", error.toString());
+                        Toast.makeText(getContext(), "Error conectar con el servidor: " +  error.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+        };
+
+        jsonObjectRequest.setRetryPolicy(new RetryPolicy() {
+            @Override
+            public int getCurrentTimeout() {
+                return 20000;
+            }
+
+            @Override
+            public int getCurrentRetryCount() {
+                return 20000;
+            }
+
+            @Override
+            public void retry(VolleyError error) throws VolleyError {
+
+            }
+        });
+
+        mRequestQueue.add(jsonObjectRequest);
     }
 
     public void BuscarCli(){
@@ -195,7 +282,6 @@ public class HomeFragment extends Fragment {
                                 JSONObject ds_perfil = respuesta.getJSONObject("ttPerfilCli");
                                 JSONArray ttPerfilCli = ds_perfil.getJSONArray("ttPerfilCli");
                                 opPerfilCliList = Arrays.asList(new Gson().fromJson(ttPerfilCli.toString(), opPerfilCli_[].class));
-
 
                                 opPerfilCliAdapter adapDet = new opPerfilCliAdapter(getContext(),null);
                                 adapDet.setList((List<opPerfilCli_>) opPerfilCliList);
@@ -254,8 +340,12 @@ public class HomeFragment extends Fragment {
     }
 
     public void CancelarPedido(){
+        ActualizaPedido(false);
+        Intent Home = new Intent(getContext(), MotivosCancela.class);
+        startActivity(Home);
 
     }
+
 }
 
 /*

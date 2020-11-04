@@ -163,7 +163,7 @@ public class Login extends AppCompatActivity {
                                 globales.g_ctUsuario = globales.g_ctUsuarioList.get(0);
                                 globales.g_ctPainani = globales.g_ctPainaniList.get(0);
 
-                                    Intent Home = new Intent(Login.this, MainActivity.class);
+                                    Intent Home = new Intent(Login.this, Aportacion.class);
                                     startActivity(Home);
                                     finish();
 
