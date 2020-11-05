@@ -15,6 +15,7 @@ public class opPedPainaniDet implements Serializable {
     private Integer iPedido;
     private Integer iProveedor;
     private  Integer iPedidoProv;
+    private String dtFecha;
 
 
 
@@ -122,5 +123,13 @@ public class opPedPainaniDet implements Serializable {
 
     public void setId(Object id) {
         this.id = id;
+    }
+
+    public String getDtFecha() {
+        return dtFecha;
+    }
+
+    public void setDtFecha(String dtFecha) {
+        this.dtFecha = dtFecha;
     }
 }

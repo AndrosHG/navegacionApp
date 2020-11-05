@@ -48,7 +48,7 @@ public class Principal extends AppCompatActivity {
                 Intent intent = new Intent(Principal.this , Login.class);
                 startActivity(intent);
                 fileList();
-                finish();
+
             }
         }, DURACION_SPLASH);
     }

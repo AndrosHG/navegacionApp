@@ -7,12 +7,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,6 +35,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.sienrgitec.navegacionapp.R;
+import com.sienrgitec.navegacionapp.actividades.Login;
 import com.sienrgitec.navegacionapp.actividades.MapsActivity;
 import com.sienrgitec.navegacionapp.actividades.opEvaluaciones;
 import com.sienrgitec.navegacionapp.adaptadores.opPedPainDetAdapter;
@@ -41,6 +44,7 @@ import com.sienrgitec.navegacionapp.modelos.opPedPainani;
 import com.sienrgitec.navegacionapp.modelos.opPedPainaniDet;
 import com.sienrgitec.navegacionapp.modelos.opPedPainaniDet_;
 import com.sienrgitec.navegacionapp.modelos.opPedidoDet;
+import com.sienrgitec.navegacionapp.ui.problemas.ProblemaFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -68,7 +72,7 @@ public class PedidoshowFragment extends Fragment {
 
     private TextView tvEntregaA, tvDomentrega;
     private ImageView ibtnMaps;
-    private Button btnEvalua;
+    private Button btnFinPed, btnProblema;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -79,7 +83,8 @@ public class PedidoshowFragment extends Fragment {
         ibtnMaps = root.findViewById(R.id.ibtnMapsCli);
 
         ibtnMaps.setVisibility(View.INVISIBLE);
-        btnEvalua = root.findViewById(R.id.btnFinPedido);
+        btnFinPed = root.findViewById(R.id.btnFinPedido);
+        btnProblema = root.findViewById(R.id.btnProblema);
 
         tvEntregaA = root.findViewById(R.id.tvEntregaA);
         tvDomentrega = root.findViewById(R.id.tvEntregaEn);
@@ -94,6 +99,9 @@ public class PedidoshowFragment extends Fragment {
             }
         });
 
+        btnFinPed.setVisibility(View.INVISIBLE);
+        //btnProblema.setVisibility(View.INVISIBLE);
+
         BuscarPedidos();
 
         ibtnMaps.setOnClickListener(v ->{
@@ -103,17 +111,14 @@ public class PedidoshowFragment extends Fragment {
             startActivity(intent);
         });
 
-        btnEvalua.setOnClickListener(v ->{
+        btnFinPed.setOnClickListener(v ->{
+            FinalizarPedido();
+        });
 
-            Log.e("ipiPersona", "--> " + opPedPainaniList.get(0).getiCliente());
-
-            Intent evalua = new Intent(getContext(), opEvaluaciones.class);
-            evalua.putExtra("ipcTipo", "Evaluacion al cliente");
-            evalua.putExtra("ipiPedido", opPedPainaniList.get(0).getiPedido());
-            evalua.putExtra("ipiPersona", opPedPainaniList.get(0).getiCliente());
-            evalua.putExtra("ipcPersona", opPedPainaniList.get(0).getcCliente());
-            evalua.putExtra("ipcTipoPersona", "cliente");
-            startActivity(evalua);
+        btnProblema.setOnClickListener(v ->{
+            Toast toast = Toast.makeText(getContext(), "Dirígete a la sección: Reportar Problema.", Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
         });
 
         return root;
@@ -150,7 +155,7 @@ public class PedidoshowFragment extends Fragment {
     public void BuscarPedidos(){
         listafinal.clear();
         getmRequestQueue();
-        String urlParams = String.format(url + "opPedPainani?ipiPainani=%1$s",  1);
+        String urlParams = String.format(url + "opPedPainani?ipiPainani=%1$s&ipcTipo=%2$s",  globales.g_ctPainani.getiPainani(), "consulta");
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, urlParams, null, new Response.Listener<JSONObject>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -166,8 +171,10 @@ public class PedidoshowFragment extends Fragment {
 
 
                             if (Error == true) {
+                                Toast toast = Toast.makeText(getContext(), "No tienes pedidos asignados.", Toast.LENGTH_SHORT);
+                                toast.setGravity(Gravity.CENTER, 0, 0);
+                                toast.show();
 
-                                return;
 
                             } else {
                                 ibtnMaps.setVisibility(View.VISIBLE);
@@ -200,6 +207,8 @@ public class PedidoshowFragment extends Fragment {
                                     listafinal.add(pasaLista);
                                 }
 
+                                btnFinPed.setVisibility(View.INVISIBLE);
+                                btnProblema.setVisibility(View.INVISIBLE);
                                 tvEntregaA.setText("Entregar a: " + opPedPainaniList.get(0).getcCliente());
                                 tvDomentrega.setText("En: " + opPedPainaniList.get(0).getcDirCliente());
 
@@ -242,7 +251,8 @@ public class PedidoshowFragment extends Fragment {
             @Override
             public Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("ipiPainani","1");
+                params.put("ipiPainani",globales.g_ctPainani.getiPainani().toString());
+                params.put("ipcTipo", "consulta");
                 return params;
             }
             @Override
@@ -316,6 +326,81 @@ public class PedidoshowFragment extends Fragment {
                 MY_DEFAULT_TIMEOUT,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));*/
+
+        mRequestQueue.add(jsonObjectRequest);
+
+    }
+
+    public void FinalizarPedido(){
+
+        Log.e("Homme--> ", "Finalizando pedido");
+        btnFinPed.setEnabled(true);
+
+        getmRequestQueue();
+
+        String urlParams = String.format(url + "pedTitlaniAct?ipiUnidad=%1$s&ipiPedido=%2$s&ipcUsuario=%3$s", globales.g_ctPainani.getiUnidad(),  globales.g_opPedidoDetList.get(0).getiPedido(), globales.g_ctUsuario.getcUsuario() );
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.PUT, urlParams, null, new Response.Listener<JSONObject>() {
+                    @RequiresApi(api = Build.VERSION_CODES.N)
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONObject respuesta = response.getJSONObject("response");
+                            Log.i("respuesta--->", respuesta.toString());
+
+                            String Mensaje = respuesta.getString("opcError");
+                            Boolean Error = respuesta.getBoolean("oplError");
+
+
+                            if (Error == true) {
+                                btnFinPed.setEnabled(true);
+                                Toast.makeText(getContext(), "Error: " + Mensaje, Toast.LENGTH_SHORT).show();
+                                return;
+
+                            } else {
+                                Log.e("ipiPersona", "--> " + opPedPainaniList.get(0).getiCliente());
+                                Intent evalua = new Intent(getContext(), opEvaluaciones.class);
+                                evalua.putExtra("ipcTipo", "Evaluacion al cliente");
+                                evalua.putExtra("ipiPedido", opPedPainaniList.get(0).getiPedido());
+                                evalua.putExtra("ipiPersona", opPedPainaniList.get(0).getiCliente());
+                                evalua.putExtra("ipcPersona", opPedPainaniList.get(0).getcCliente());
+                                evalua.putExtra("ipcTipoPersona", "cliente");
+                                startActivity(evalua);
+                            }
+                        } catch (JSONException e) {
+                            btnFinPed.setEnabled(true);
+                            Toast.makeText(getContext(), "Error  conversión de Datos: ", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        btnFinPed.setEnabled(true);
+                        Toast.makeText(getContext(), "Error: al conectar con el servidor", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }) {
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("ipiUnidad",globales.g_ctPainani.getiUnidad().toString());
+                params.put("ipiPedido",  globales.g_opPedidoDetList.get(0).getiPedido().toString());
+                params.put("ipcUsuario", globales.g_ctUsuario.getcUsuario());
+                //  params.put("ipiPersona", )
+
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+        };
+        // Access the RequestQueue through your singleton class.
 
         mRequestQueue.add(jsonObjectRequest);
 

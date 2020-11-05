@@ -10,7 +10,7 @@ public class ProblemaViewModel extends ViewModel {
 
     public ProblemaViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is Cobranza fragment");
+        mText.setValue("Debes ser responsable al momento de reportar un problema. Todo abuso será sancionado");
     }
 
     public LiveData<String> getText() {

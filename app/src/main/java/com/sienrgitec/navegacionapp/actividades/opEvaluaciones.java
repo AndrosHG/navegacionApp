@@ -132,6 +132,7 @@ public class opEvaluaciones extends AppCompatActivity {
     }
 
     public void CargactEvalua(){
+        listfinEvalua.clear();
         getmRequestQueue();
         String urlParams = String.format(url + "ctEvaluacion?iplActivo=%1$s&ipcTipo=%2$s", true, vcTipo );
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -228,10 +229,6 @@ public class opEvaluaciones extends AppCompatActivity {
 
     /*Va creando un arraylist de los puntos evaluados*/
     public void CreaParamEvalua(Float vdeEvalua, Integer viPunto, Integer viEvalua){
-
-
-
-
         opClienteEvalua objNvaEvaluacion = new opClienteEvalua();
         objNvaEvaluacion.setiPedido(viPedido);
         objNvaEvaluacion.setiPersona(viPersona);
@@ -328,15 +325,13 @@ public class opEvaluaciones extends AppCompatActivity {
                                 MuestraMensaje("Aviso", "La evaluación fue exitosa");
 
 
-                                /*if(vcPersona.equals("Proveedor")) {
-                                    Intent Home = new Intent(EvaluaCli.this, Home.class);
-                                    Home.putExtra("ipcEvaluado", "proveedor");
+                                if(vcPersona.equals("Proveedor")) {
+                                    Intent Home = new Intent(opEvaluaciones.this, MainActivity.class);
                                     startActivity(Home);
                                 }else{
-                                    Intent Home = new Intent(EvaluaCli.this, Home.class);
-                                    Home.putExtra("ipcEvaluado", "cliente");
+                                    Intent Home = new Intent(opEvaluaciones.this, MainActivity.class);
                                     startActivity(Home);
-                                }*/
+                                }
 
                                 opClienteEvaluaList.clear();
 

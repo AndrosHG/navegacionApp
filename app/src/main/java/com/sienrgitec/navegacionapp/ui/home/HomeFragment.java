@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,7 +79,7 @@ public class HomeFragment extends Fragment {
         btnContinuar = root.findViewById(R.id.btnContinua);
         btnRechazar  = root.findViewById(R.id.btnRechaza);
 
-        
+
         recycler      = (RecyclerView) root.findViewById(R.id.lista);
         recycler.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
 
@@ -90,8 +91,7 @@ public class HomeFragment extends Fragment {
         });
 
         btnContinuar.setOnClickListener(v ->{
-            Intent Home = new Intent(getContext(), PedidoshowFragment.class);
-            startActivity(Home);
+            Toast.makeText(getContext(), "Dirígete a la sección de Pedidos Pendientes", Toast.LENGTH_SHORT).show();
         });
 
 
@@ -100,8 +100,12 @@ public class HomeFragment extends Fragment {
         });
 
 
-        if(globales.g_opPedPainani.size() == 0){
+        if(globales.g_opPedPainani == null){
             Log.e("iniciando home---> ", "no tienes pedido");
+            Toast toast = Toast.makeText(getContext(), "No tienes pedidos asignados.", Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+
         }else{
             final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setCancelable(true);
@@ -149,7 +153,7 @@ public class HomeFragment extends Fragment {
         globales.opPedPainaniList.clear();
         opPedPainani objActualizaPed  = new opPedPainani();
         objActualizaPed.setcCvePedido  ("globales.g_opPedPainani.get(0).getcCvePedido()");
-        /*objActualizaPed.setcDirCliente (globales.g_opPedPainani.get(0).getcDirCliente());
+        objActualizaPed.setcDirCliente (globales.g_opPedPainani.get(0).getcDirCliente());
         objActualizaPed.setDtAvisado   (globales.g_opPedPainani.get(0).getDtAvisado());
         objActualizaPed.setDtContestado(globales.g_opPedPainani.get(0).getDtContestado());
         objActualizaPed.setDtFecha     (globales.g_opPedPainani.get(0).getDtFecha());
@@ -160,7 +164,7 @@ public class HomeFragment extends Fragment {
         objActualizaPed.setiPedido     (globales.g_opPedPainani.get(0).getiPedido()); //
         objActualizaPed.setlAceptado   (vlAcetpado);
         objActualizaPed.setlContestado (true);
-        objActualizaPed.setlReasignado (false);*/
+        objActualizaPed.setlReasignado (false);
 
         globales.opPedPainaniList.add(objActualizaPed);
 

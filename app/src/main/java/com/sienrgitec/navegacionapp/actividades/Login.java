@@ -3,16 +3,11 @@ package com.sienrgitec.navegacionapp.actividades;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Message;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
@@ -175,12 +170,13 @@ public class Login extends AppCompatActivity {
                                 globales.g_ctUsuario = globales.g_ctUsuarioList.get(0);
                                 globales.g_ctPainani = globales.g_ctPainaniList.get(0);
 
+
                                 if(vlInicio == true){
                                     startActivity(new Intent(Login.this, Aportacion.class));
-                                    finish();
+
                                 }else {
                                     startActivity(new Intent(Login.this, MainActivity.class));
-                                    finish();
+
                                 }
                             }
                         } catch (JSONException e) {

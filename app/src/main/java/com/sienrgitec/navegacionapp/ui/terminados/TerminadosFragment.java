@@ -16,12 +16,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -32,6 +34,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.sienrgitec.navegacionapp.R;
+import com.sienrgitec.navegacionapp.actividades.Login;
+import com.sienrgitec.navegacionapp.adaptadores.HistorialPedAdapter;
 import com.sienrgitec.navegacionapp.adaptadores.opPedPainDetAdapter;
 import com.sienrgitec.navegacionapp.configuracion.Globales;
 import com.sienrgitec.navegacionapp.modelos.opPedPainani;
@@ -57,15 +61,16 @@ public class TerminadosFragment extends Fragment {
 
     public Globales globales;
     public String   url = globales.URL;
-    private Integer viPersona;
+
 
     public RecyclerView recycler;
     public static ArrayList<opPedPainaniDet_> listafinal       = new ArrayList<>();
+
+
+
     public static List<opPedPainani> opPedPainaniList = null;
 
-    private TextView tvEntregaA, tvDomentrega;
-    private ImageView ibtnMaps;
-    private Button btnEvalua;
+
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -74,15 +79,9 @@ public class TerminadosFragment extends Fragment {
                 ViewModelProviders.of(this).get(TerminadosViewModel.class);
         View root = inflater.inflate(R.layout.fragment_terminados, container, false);
         final TextView textView = root.findViewById(R.id.text_fin);
-        ibtnMaps = root.findViewById(R.id.ibtnMapsCli);
 
-        ibtnMaps.setVisibility(View.INVISIBLE);
-        btnEvalua = root.findViewById(R.id.btnFinPedido);
 
-        tvEntregaA = root.findViewById(R.id.tvEntregaA);
-        tvDomentrega = root.findViewById(R.id.tvEntregaEn);
-
-        recycler      = (RecyclerView) root.findViewById(R.id.lista);
+        recycler      = (RecyclerView) root.findViewById(R.id.listaTerminados);
         recycler.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
 
         terminadosViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
@@ -91,7 +90,7 @@ public class TerminadosFragment extends Fragment {
                 textView.setText(s);
             }
         });
-        //BuscarPedidos();
+        BuscarTerminados();
 
         return root;
     }
@@ -107,28 +106,11 @@ public class TerminadosFragment extends Fragment {
         }
     }
 
-    public void MuestraMensaje(String vcTitulo, String vcMensaje, Context ipcContext){
 
-            AlertDialog.Builder myBuild = new AlertDialog.Builder(ipcContext);
-            myBuild.setMessage(vcMensaje);
-            myBuild.setTitle(Html.fromHtml("<font color ='#FF0000'>" + vcTitulo +"</font>"));
-            myBuild.setPositiveButton("ACEPTAR", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-
-                }
-            });
-            AlertDialog dialog = myBuild.create();
-            dialog.show();
-            return;
-
-    }
-
-    public void BuscarPedidos(){
+    public void BuscarTerminados(){
         listafinal.clear();
         getmRequestQueue();
-        String urlParams = String.format(url + "opPedPainani?ipiPainani=%1$s",  1);
+        String urlParams = String.format(url + "opHistorialPed?ipiPainani=%1$s",  globales.g_ctPainani.getiPainani());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, urlParams, null, new Response.Listener<JSONObject>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -144,11 +126,13 @@ public class TerminadosFragment extends Fragment {
 
 
                             if (Error == true) {
-
+                                Toast toast = Toast.makeText(getContext(), "Error: " + Mensaje, Toast.LENGTH_SHORT);
+                                toast.setGravity(Gravity.CENTER, 0, 0);
+                                toast.show();
                                 return;
 
                             } else {
-                                ibtnMaps.setVisibility(View.VISIBLE);
+
 
                                 JSONObject ds_opPedido = respuesta.getJSONObject("tt_opPedido");
                                 JSONObject ds_opPedidoDet = respuesta.getJSONObject("tt_opPedidoDet");
@@ -165,62 +149,34 @@ public class TerminadosFragment extends Fragment {
                                 globales.g_ctPedPainaniDetList = Arrays.asList(new Gson().fromJson(tt_opPedPainaniDet.toString(), opPedPainaniDet[].class));
 
 
-                                for(opPedPainaniDet obj: globales.g_ctPedPainaniDetList){
-                                    opPedPainaniDet_ pasaLista = new opPedPainaniDet_();
-                                    pasaLista.setiPainani(obj.getiPainani());
-                                    pasaLista.setiPedido(obj.getiPedido());
-                                    pasaLista.setiProveedor(obj.getiProveedor());
-                                    pasaLista.setcNegocion(obj.getcNegocion());
-                                    pasaLista.setcDirProveedor(obj.getcDirProveedor());
-                                    pasaLista.setiPartida(obj.getiPartida());
-                                    pasaLista.setiPedidoProv(obj.getiPedidoProv());
-                                    pasaLista.setDeTotalPiezas(obj.getDeTotalPiezas());
-                                    listafinal.add(pasaLista);
-                                }
 
-                                tvEntregaA.setText("Entregar a: " + opPedPainaniList.get(0).getcCliente());
-                                tvDomentrega.setText("En: " + opPedPainaniList.get(0).getcDirCliente());
 
-                                opPedPainDetAdapter adapDet = new opPedPainDetAdapter(getContext(),null);
-                                adapDet.setList((List<opPedPainaniDet_>) listafinal);
-                                recycler.setAdapter(adapDet);
+
+
+
                             }
                         } catch (JSONException e) {
-                            AlertDialog.Builder myBuild = new AlertDialog.Builder(getContext());
-                            myBuild.setMessage("Error en la conversión de Datos. Vuelva a Intentar. " + e);
-                            myBuild.setTitle(Html.fromHtml("<font color ='#FF0000'> ERROR CONVERSION </font>"));
-                            myBuild.setPositiveButton("ACEPTAR", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.cancel();
-                                }
-                            });
-                            AlertDialog dialog = myBuild.create();
-                            dialog.show();
+
+                            Toast toast = Toast.makeText(getContext(), "Error en la Conversión de Datos.", Toast.LENGTH_SHORT);
+                            toast.setGravity(Gravity.CENTER, 0, 0);
+                            toast.show();
+                            return;
                         }
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // TODO: Handle error
-                        Log.i("Error Respuesta", error.toString());
-                        AlertDialog.Builder myBuild = new AlertDialog.Builder(getContext());
-                        myBuild.setMessage("No se pudo conectar con el servidor. Vuelva a Intentar. " + error.toString());
-                        myBuild.setTitle(Html.fromHtml("<font color ='#FF0000'> ERROR RESPUESTA </font>"));
-                        myBuild.setPositiveButton("ACEPTAR", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        });
-                        AlertDialog dialog = myBuild.create();
-                        dialog.show();
+
+                        Toast toast = Toast.makeText(getContext(), "No se pudo conectar con el servidor..", Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+                        return;
                     }
                 }) {
             @Override
             public Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("ipiPainani","1");
+                params.put("ipiPainani",globales.g_ctPainani.getiPainani().toString());
                 return params;
             }
             @Override

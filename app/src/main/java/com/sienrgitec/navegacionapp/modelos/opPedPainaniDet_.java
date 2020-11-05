@@ -55,6 +55,10 @@ public class opPedPainaniDet_ implements Serializable {
     @Expose
     private Integer iPedidoProv;
 
+    @SerializedName("dtFecha")
+    @Expose
+    private String dtFecha;
+
     public Integer getiPedidoProv() {
         return iPedidoProv;
     }
@@ -149,6 +153,14 @@ public class opPedPainaniDet_ implements Serializable {
 
     public void setiProveedor(Integer iProveedor) {
         this.iProveedor = iProveedor;
+    }
+
+    public String getDtFecha() {
+        return dtFecha;
+    }
+
+    public void setDtFecha(String dtFecha) {
+        this.dtFecha = dtFecha;
     }
 
 

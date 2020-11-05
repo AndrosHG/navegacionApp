@@ -10,7 +10,7 @@ public class TerminadosViewModel extends ViewModel {
 
     public TerminadosViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("Pedido Actual");
+        mText.setValue("Historia del perdidos terminados");
     }
 
     public LiveData<String> getText() {

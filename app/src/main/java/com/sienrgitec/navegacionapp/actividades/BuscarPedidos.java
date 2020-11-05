@@ -73,7 +73,7 @@ public class BuscarPedidos extends Activity {
         /**Buscando Pedidos**/
         getmRequestQueue(vcContext);
 
-        String urlParams = String.format(url + "opPedPainani?ipiPainani=%1$s",  1);
+        String urlParams = String.format(url + "opPedPainani?ipiPainani=%1$s&ipcTipo=%2$s", globales.g_ctPainani.getiPainani().toString(), "servicio");
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, urlParams, null, new Response.Listener<JSONObject>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -89,10 +89,10 @@ public class BuscarPedidos extends Activity {
                             Boolean Error = respuesta.getBoolean("oplError");
 
 
-                            Error = false;
+
 
                             if (Error == true) {
-
+                                Log.i("eRROR--->", Mensaje);
                                 return;
 
                             } else {
@@ -178,7 +178,8 @@ public class BuscarPedidos extends Activity {
             @Override
             public Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("ipiPainani","1");
+                params.put("ipiPainani",globales.g_ctPainani.getiPainani().toString());
+                params.put("ipcTipo", "servicio");
                 return params;
             }
             @Override

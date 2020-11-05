@@ -20,14 +20,16 @@ import com.sienrgitec.navegacionapp.actividades.Login;
 import com.sienrgitec.navegacionapp.actividades.MainActivity;
 import com.sienrgitec.navegacionapp.configuracion.Globales;
 
+import static com.sienrgitec.navegacionapp.configuracion.Globales.g_ctUsuario;
 import static com.sienrgitec.navegacionapp.configuracion.Globales.vglBuscaPed;
 import static com.sienrgitec.navegacionapp.configuracion.Globales.vglEjecServ;
 
 public class BuscaUbicacionServ extends JobIntentService {
-
+    private Globales globales;
 
     public static final int JOB_ID = 1;
     public static void enqueueWork(final Context context, Intent work) {
+
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         LocationListener locationListener= new LocationListener(){
             public void onLocationChanged(Location location){
@@ -36,10 +38,19 @@ public class BuscaUbicacionServ extends JobIntentService {
                     CreaUbicacion ubicame = new CreaUbicacion();
                     ubicame.CreaRegistro(location.getLatitude(), location.getLongitude(), context);
 
-                    if(vglBuscaPed == true) {
+                    if(g_ctUsuario != null){
+                        Log.e("servicio--> ", "vacios");
+                        if(vglBuscaPed == true) {
+                            BuscarPedidos busca = new BuscarPedidos();
+                            busca.BuscarPed(context);
+                        }
+                    }
+                    //
+
+                    /*if(vglBuscaPed == true) {
                         BuscarPedidos busca = new BuscarPedidos();
                         busca.BuscarPed(context);
-                    }
+                    }*/
 
                 }
             }

@@ -45,7 +45,8 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lista" />
+        app:layout_constraintTop_toBottomOf="@+id/lista"
+        android:visibility="invisible"/>
 
     <Button
         android:id="@+id/button3"
@@ -56,7 +57,8 @@
         android:layout_marginTop="70dp"
         android:text="Button"
         app:layout_constraintStart_toEndOf="@+id/editTextTextMultiLine"
-        app:layout_constraintTop_toBottomOf="@+id/lista" />
+        app:layout_constraintTop_toBottomOf="@+id/lista"
+        android:visibility="invisible"/>
 
     <EditText
         android:id="@+id/editTextTextMultiLine"
@@ -69,24 +71,18 @@
         android:gravity="start|top"
         android:inputType="textMultiLine"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
+        app:layout_constraintTop_toBottomOf="@+id/ratingBar"
+        android:visibility="invisible"/>
 
     <Button
         android:id="@+id/btnFinEvalua"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="4dp"
-        android:text="FINALIZAR EVALUACION"
         android:background="@drawable/bgbotones"
+        android:text="FINALIZAR EVALUACION"
         android:textColor="@color/txtbtn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLine" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
