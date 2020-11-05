@@ -41,6 +41,7 @@ import com.sienrgitec.navegacionapp.configuracion.Globales;
 import com.sienrgitec.navegacionapp.modelos.opPedPainani;
 import com.sienrgitec.navegacionapp.modelos.opPedPainaniDet;
 import com.sienrgitec.navegacionapp.modelos.opPedPainaniDet_;
+import com.sienrgitec.navegacionapp.modelos.opPedPainani_;
 import com.sienrgitec.navegacionapp.modelos.opPedidoDet;
 
 import org.json.JSONArray;
@@ -61,13 +62,13 @@ public class TerminadosFragment extends Fragment {
 
     public Globales globales;
     public String   url = globales.URL;
-
+    private Integer viPersona;
 
     public RecyclerView recycler;
     public static ArrayList<opPedPainaniDet_> listafinal       = new ArrayList<>();
 
 
-
+    public static ArrayList<opPedPainani_> listaTerminados       = new ArrayList<>();
     public static List<opPedPainani> opPedPainaniList = null;
 
 
@@ -144,16 +145,26 @@ public class TerminadosFragment extends Fragment {
                                 JSONArray tt_opPedPainani = ds_opPedPainani.getJSONArray("tt_opPedPainani");
                                 JSONArray tt_opPedPainaniDet = ds_opPedPainaniDet.getJSONArray("tt_opPedPainaniDet");
 
-                                globales.g_opPedidoDetList     = Arrays.asList(new Gson().fromJson(tt_opPedidoDet.toString(), opPedidoDet[].class));
+                                //globales.g_opPedidoDetList     = Arrays.asList(new Gson().fromJson(tt_opPedidoDet.toString(), opPedidoDet[].class));
                                 opPedPainaniList     = Arrays.asList(new Gson().fromJson(tt_opPedPainani.toString(), opPedPainani[].class));
-                                globales.g_ctPedPainaniDetList = Arrays.asList(new Gson().fromJson(tt_opPedPainaniDet.toString(), opPedPainaniDet[].class));
+                                //globales.g_ctPedPainaniDetList = Arrays.asList(new Gson().fromJson(tt_opPedPainaniDet.toString(), opPedPainaniDet[].class));
+
+
+                                for(opPedPainani obj: opPedPainaniList){
+                                    opPedPainani_ pasaLista = new opPedPainani_();
+                                    pasaLista.setiPainani(obj.getiPainani());
+                                    pasaLista.setiPedido(obj.getiPedido());
+                                    pasaLista.setcCliente(obj.getcCliente());
+                                    pasaLista.setcDirCliente(obj.getcDirCliente());
+                                    pasaLista.setDtFecha(obj.getDtFecha());
+                                    listaTerminados.add(pasaLista);
+                                }
 
 
 
-
-
-
-
+                                HistorialPedAdapter adapter = new HistorialPedAdapter(getContext(),null);
+                                adapter.setList((List<opPedPainani_>) listaTerminados);
+                                recycler.setAdapter(adapter);
                             }
                         } catch (JSONException e) {
 

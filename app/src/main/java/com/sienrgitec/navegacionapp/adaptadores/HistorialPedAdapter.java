@@ -1,29 +1,23 @@
 package com.sienrgitec.navegacionapp.adaptadores;
 
 import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sienrgitec.navegacionapp.R;
 
-import com.sienrgitec.navegacionapp.actividades.MuestraDet;
-
-import com.sienrgitec.navegacionapp.modelos.opHistorialPed;
+import com.sienrgitec.navegacionapp.modelos.opPedPainani_;
 
 
-
-public class HistorialPedAdapter extends RVAdapter<opHistorialPed> {
+public class HistorialPedAdapter extends RVAdapter<opPedPainani_> {
 
     private Context contextc;
 
 
-    public HistorialPedAdapter(Context context, RVAdapter.OnViewHolderClick<opHistorialPed> listener) {
+    public HistorialPedAdapter(Context context, RVAdapter.OnViewHolderClick<opPedPainani_> listener) {
         super(context, listener);
     }
 
@@ -37,31 +31,23 @@ public class HistorialPedAdapter extends RVAdapter<opHistorialPed> {
     }
 
     @Override
-    protected void bindView(final opHistorialPed item, RVAdapter.ListViewHolder viewHolder) {
+    protected void bindView(final opPedPainani_ item, RVAdapter.ListViewHolder viewHolder) {
         if (item != null) {
+           // ImageView btnBucarDet = (ImageView)viewHolder.getView(R.id.imageView8);
 
 
             TextView dtFecha = (TextView)viewHolder.getView(R.id.tvFechaF);
             dtFecha.setText("Fecha: " + item.getDtFecha());
 
-            TextView vipedido = (TextView)viewHolder.getView(R.id.tviPedidof);
-            vipedido.setText("Pedido: " + item.getiPedido().toString());
-
-            TextView detotArt = (TextView)viewHolder.getView(R.id.tvdeTotArtF);
-            detotArt.setText("Tot. Art.: " + item.getDeTotalPiezas().toString());
-
-            TextView cNegocio = (TextView)viewHolder.getView(R.id.tvNegocioF);
-            cNegocio.setText("Proveedor: " + item.getcNegocio());
-
-            TextView cDomicilio = (TextView)viewHolder.getView(R.id.tvDomF);
-            cDomicilio.setText("Domicilio: " + item.getcDirProveedor());
-
+            TextView ipedido = (TextView)viewHolder.getView(R.id.tviPedidof);
+            ipedido.setText("Pedido: " + item.getiPedido().toString());
 
             TextView cCliente = (TextView)viewHolder.getView(R.id.tvCliF);
             cCliente.setText("Cliente: " + item.getcCliente());
 
-            TextView cDomCli = (TextView)viewHolder.getView(R.id.tvDomCliF);
-            cDomCli.setText("Domicilio: " + item.getcDirCli());
+            TextView cDomicilio = (TextView)viewHolder.getView(R.id.tvDomCliF);
+            cDomicilio.setText("Domicilio: " + item.getcDirCliente());
+
 
 
         }
