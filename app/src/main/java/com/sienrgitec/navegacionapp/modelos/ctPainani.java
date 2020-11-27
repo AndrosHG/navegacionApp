@@ -22,7 +22,15 @@ public class ctPainani implements Serializable {
     private String cUsuModifica;
     private String bImagen;
     private String cForo;
+    private Boolean lForaneo;
 
+    public Boolean getlForaneo() {
+        return lForaneo;
+    }
+
+    public void setlForaneo(Boolean lForaneo) {
+        this.lForaneo = lForaneo;
+    }
 
     public String getcApellidoMat() {
         return cApellidoMat;

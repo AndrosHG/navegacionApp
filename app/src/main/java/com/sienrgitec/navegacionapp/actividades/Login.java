@@ -171,9 +171,19 @@ public class Login extends AppCompatActivity {
                                 globales.g_ctPainani = globales.g_ctPainaniList.get(0);
 
 
-                                if(vlInicio == true){
-                                    startActivity(new Intent(Login.this, Aportacion.class));
+                                for(ctPainani objCatP: globales.g_ctPainaniList){
+                                    Log.e("Login--> ", "Soy foraneo? " + objCatP.getlForaneo());
 
+                                }
+
+
+                                if(vlInicio == true){
+
+                                    if(globales.g_ctPainani.getlForaneo().equals(false)) {
+                                        startActivity(new Intent(Login.this, Aportacion.class));
+                                    }else{
+                                        startActivity(new Intent(Login.this, MainActivity.class));
+                                    }
                                 }else {
                                     startActivity(new Intent(Login.this, MainActivity.class));
 

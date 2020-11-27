@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -45,7 +46,8 @@ public class ctEvaluacionAdapter extends RVAdapter<ctEvaluacion> {
     protected void bindView(final ctEvaluacion item, RVAdapter.ListViewHolder viewHolder) {
         if (item != null) {
             ImageView btnMapas    = (ImageView) viewHolder.getView(R.id.imageView9);
-            RatingBar ratingBar   = (RatingBar) viewHolder.getView(R.id.ratingBar2);;
+            RatingBar ratingBar   = (RatingBar) viewHolder.getView(R.id.ratingBar2);
+            Button    btnEvalua   = (Button)    viewHolder.getView(R.id.btnEvalua);;
 
 
 
@@ -56,7 +58,7 @@ public class ctEvaluacionAdapter extends RVAdapter<ctEvaluacion> {
                 }
             });
 
-            btnMapas.setOnClickListener(v ->{
+            btnEvalua.setOnClickListener(v ->{
                 Log.e("Adapter Evaluea--> ", item.getcEvalua() + " valor " + vdeCalificacion);
 
 

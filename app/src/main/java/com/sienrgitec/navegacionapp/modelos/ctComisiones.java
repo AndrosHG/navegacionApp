@@ -11,7 +11,16 @@ public class ctComisiones implements Serializable {
     private String  dtCreado;
     private String  dtModificado;
     private Integer iComision;
+    private Integer iUnidad;
     private Object id;
+
+    public Integer getiUnidad() {
+        return iUnidad;
+    }
+
+    public void setiUnidad(Integer iUnidad) {
+        this.iUnidad = iUnidad;
+    }
 
     public String getcComision() {
         return cComision;

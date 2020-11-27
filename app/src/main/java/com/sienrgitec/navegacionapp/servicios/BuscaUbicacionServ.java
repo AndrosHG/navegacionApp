@@ -35,8 +35,8 @@ public class BuscaUbicacionServ extends JobIntentService {
             public void onLocationChanged(Location location){
                 if(vglEjecServ == true) {
 
-                    CreaUbicacion ubicame = new CreaUbicacion();
-                    ubicame.CreaRegistro(location.getLatitude(), location.getLongitude(), context);
+                    /*CreaUbicacion ubicame = new CreaUbicacion();
+                    ubicame.CreaRegistro(location.getLatitude(), location.getLongitude(), context);*/
 
                     if(g_ctUsuario != null){
                         Log.e("servicio--> ", "vacios");

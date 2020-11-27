@@ -27,7 +27,10 @@ public class Globales {
     public static Boolean vglBuscaPed = true;
     public static Integer vgiComision = 0;
     public static Integer vgiVehiculo = 0;
-    public static Double  vg_deLongitud, vg_deLatitud;
+    public static Double  vg_deLongitud = -99.152289, vg_deLatitud = 19.308508;
+    public static Boolean vg_lEntregaCli = false;
+
+    public static Integer vg_iPedido = 0;
 
 
     public static ctUsuario g_ctUsuario = null;

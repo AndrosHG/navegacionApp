@@ -99,9 +99,9 @@ public class PedidoshowFragment extends Fragment {
             }
         });
 
-        btnFinPed.setVisibility(View.INVISIBLE);
-        //btnProblema.setVisibility(View.INVISIBLE);
 
+        //btnProblema.setVisibility(View.INVISIBLE);
+        btnFinPed.setVisibility(View.INVISIBLE);
         BuscarPedidos();
 
         ibtnMaps.setOnClickListener(v ->{
@@ -207,10 +207,16 @@ public class PedidoshowFragment extends Fragment {
                                     listafinal.add(pasaLista);
                                 }
 
-                                btnFinPed.setVisibility(View.INVISIBLE);
+                                if (globales.vg_lEntregaCli == true) {
+                                    btnFinPed.setVisibility(View.VISIBLE);
+                                }
                                 btnProblema.setVisibility(View.INVISIBLE);
                                 tvEntregaA.setText("Entregar a: " + opPedPainaniList.get(0).getcCliente());
                                 tvDomentrega.setText("En: " + opPedPainaniList.get(0).getcDirCliente());
+
+
+                                globales.vg_iPedido = opPedPainaniList.get(0).getiPedido();
+
 
                                 opPedPainDetAdapter adapDet = new opPedPainDetAdapter(getContext(),null);
                                 adapDet.setList((List<opPedPainaniDet_>) listafinal);
@@ -290,6 +296,7 @@ public class PedidoshowFragment extends Fragment {
                                     MuestraMensaje("Aviso", "Asegurate de que los productos correspondan con el pedido", ipcContextp);
                                 }else{
                                     MuestraMensaje("Aviso", "Hecho",ipcContextp);
+
                                 }
                             }
                         } catch (JSONException e) {
@@ -338,7 +345,7 @@ public class PedidoshowFragment extends Fragment {
 
         getmRequestQueue();
 
-        String urlParams = String.format(url + "pedTitlaniAct?ipiUnidad=%1$s&ipiPedido=%2$s&ipcUsuario=%3$s", globales.g_ctPainani.getiUnidad(),  globales.g_opPedidoDetList.get(0).getiPedido(), globales.g_ctUsuario.getcUsuario() );
+        String urlParams = String.format(url + "pedTitlaniAct?ipiUnidad=%1$s&ipiPedido=%2$s&ipcUsuario=%3$s", globales.g_ctPainani.getiUnidad(), globales.vg_iPedido /*globales.g_opPedidoDetList.get(0).getiPedido()*/, globales.g_ctUsuario.getcUsuario() );
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.PUT, urlParams, null, new Response.Listener<JSONObject>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -386,7 +393,7 @@ public class PedidoshowFragment extends Fragment {
             public Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put("ipiUnidad",globales.g_ctPainani.getiUnidad().toString());
-                params.put("ipiPedido",  globales.g_opPedidoDetList.get(0).getiPedido().toString());
+                params.put("ipiPedido",  globales.vg_iPedido.toString());
                 params.put("ipcUsuario", globales.g_ctUsuario.getcUsuario());
                 //  params.put("ipiPersona", )
 

@@ -95,6 +95,10 @@ public class HomeFragment extends Fragment {
         });
 
 
+        /*if(globales.g_ctPainani.getlForaneo().equals(true)){
+            btnRechazar.setVisibility(View.INVISIBLE);
+
+        }*/
         btnRechazar.setOnClickListener(v ->{
             CancelarPedido();
         });
@@ -107,28 +111,37 @@ public class HomeFragment extends Fragment {
             toast.show();
 
         }else{
-            final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setCancelable(true);
-            builder.setTitle(Html.fromHtml("<font color ='#FF0000'> Tienes un nuevo pedido </font>"));
-            builder.setMessage("¿Aceptar Pedido?");
-            builder.setPositiveButton("Si",
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            ActualizaPedido(true);
 
-                        }
-                    });
-            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    ActualizaPedido(false);
+            if(globales.g_ctPainani.getlForaneo().equals(true)){
+                Toast toast = Toast.makeText(getContext(), "Dirigete a la Seccion de Pedidos.", Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
 
-                }
-            });
+            }else {
 
-            final AlertDialog alert = builder.create();
-            alert.show();
+                final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setCancelable(true);
+                builder.setTitle(Html.fromHtml("<font color ='#FF0000'> Tienes un nuevo pedido </font>"));
+                builder.setMessage("¿Aceptar Pedido?");
+                builder.setPositiveButton("Si",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ActualizaPedido(true);
+
+                            }
+                        });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ActualizaPedido(false);
+
+                    }
+                });
+
+                final AlertDialog alert = builder.create();
+                alert.show();
+            }
         }
 
         //BuscaTareas();
@@ -264,7 +277,7 @@ public class HomeFragment extends Fragment {
 
     public void BuscarCli(){
         getmRequestQueue();
-        String urlParams = String.format(url + "perfilCli?ipiPedido=%1$s&ipiCliente=%2$s", 403, 130 ); //globales.g_opPedPainani.get(0).getiPedido(), globales.g_opPedPainani.get(0).getiCliente()
+        String urlParams = String.format(url + "perfilCli?ipiPedido=%1$s&ipiCliente=%2$s", globales.g_opPedPainani.get(0).getiPedido(), globales.g_opPedPainani.get(0).getiCliente());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, urlParams, null, new Response.Listener<JSONObject>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -308,8 +321,8 @@ public class HomeFragment extends Fragment {
             @Override
             public Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("ipiPedido",   "403" );// globales.g_opPedPainani.get(0).getiPedido().toString());
-                params.put("ipiCliente","130" ); //globales.g_opPedPainani.get(0).getiCliente().toString());
+                params.put("ipiPedido",   globales.g_opPedPainani.get(0).getiPedido().toString());
+                params.put("ipiCliente",  globales.g_opPedPainani.get(0).getiCliente().toString());
                 return params;
             }
 

@@ -11,7 +11,9 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -58,6 +60,7 @@ public class Aportacion extends AppCompatActivity {
 
     public RecyclerView recyclerCom, recyclerVehiculo;
     public Button btnGuardar;
+    public TextView tvSeleccV;
 
 
 
@@ -74,13 +77,19 @@ public class Aportacion extends AppCompatActivity {
         recyclerVehiculo.setLayoutManager(new LinearLayoutManager(Aportacion.this,LinearLayoutManager.VERTICAL,false));
 
         btnGuardar = (Button) findViewById(R.id.btnEmpezar);
+        tvSeleccV  = (TextView) findViewById(R.id.tvVehiculo);
 
         btnGuardar.setOnClickListener(v ->{
            GenerarInicio();
         });
 
         CargaComisiones();
-        CargaVehiculos();
+
+        if(globales.g_ctPainani.getlForaneo().equals(true)) {
+            tvSeleccV.setVisibility(View.INVISIBLE);
+        }else{
+            CargaVehiculos();
+        }
     }
     public void getmRequestQueue()    {
         try{
@@ -120,10 +129,12 @@ public class Aportacion extends AppCompatActivity {
 
                             } else {
                                 for(ctComisiones obj: listctComision){
-                                    ctComisiones pasaLista = new ctComisiones();
-                                    pasaLista.setiComision(obj.getiComision());
-                                    pasaLista.setDeValor(obj.getDeValor());
-                                    listctComisionFinal.add(pasaLista);
+                                    if(obj.getiUnidad().equals(globales.g_ctPainani.getiUnidad())) {
+                                        ctComisiones pasaLista = new ctComisiones();
+                                        pasaLista.setiComision(obj.getiComision());
+                                        pasaLista.setDeValor(obj.getDeValor());
+                                        listctComisionFinal.add(pasaLista);
+                                    }
                                 }
 
                                 ctComisionAdapter adapDet = new ctComisionAdapter(Aportacion.this,null);
@@ -236,9 +247,11 @@ public class Aportacion extends AppCompatActivity {
             return;
         }
 
-        if(globales.vgiVehiculo == 0){
-            Toast.makeText(Aportacion.this, "Debes seleccionar el vehículo que deseas utilizar." , Toast.LENGTH_SHORT).show();
-            return;
+        if(globales.g_ctPainani.getlForaneo().equals(false)) {
+            if (globales.vgiVehiculo == 0) {
+                Toast.makeText(Aportacion.this, "Debes seleccionar el vehículo que deseas utilizar.", Toast.LENGTH_SHORT).show();
+                return;
+            }
         }
 
         final ProgressDialog nDialog;
@@ -249,6 +262,7 @@ public class Aportacion extends AppCompatActivity {
 
         opDispPainani objComisionDispP = new opDispPainani();
         objComisionDispP.setiPainani(globales.g_ctUsuario.getiPersona());
+        objComisionDispP.setiUnidad(globales.g_ctPainani.getiUnidad());
         objComisionDispP.setDtFecha(globales.g_opDispPList.get(0).getDtFecha());
         objComisionDispP.setiComision(globales.vgiComision);
         objComisionDispP.setDtCheckIn(globales.g_opDispPList.get(0).getDtCheckIn());

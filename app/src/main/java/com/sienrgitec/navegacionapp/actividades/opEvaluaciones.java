@@ -4,8 +4,15 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,6 +36,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.sienrgitec.navegacionapp.R;
@@ -40,6 +48,7 @@ import com.sienrgitec.navegacionapp.modelos.ctProveedor;
 import com.sienrgitec.navegacionapp.modelos.ctProveedor_;
 import com.sienrgitec.navegacionapp.modelos.opClienteEvalua;
 import com.sienrgitec.navegacionapp.ui.home.HomeViewModel;
+import com.sienrgitec.navegacionapp.ui.pedidos.PedidoshowFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,6 +70,7 @@ public class opEvaluaciones extends AppCompatActivity {
     private Button btnEntregaCli;
     private TextView tvEvaluado;
     public RecyclerView recycler;
+    private AppBarConfiguration mAppBarConfiguration;
 
     public static List<ctEvaluacion> listaEvaluacion    = null;
     public static ArrayList<ctEvaluacion> listfinEvalua = new ArrayList<>();
@@ -317,24 +327,27 @@ public class opEvaluaciones extends AppCompatActivity {
                             Boolean Error = respuesta.getBoolean("oplError");
                             String Mensaje = respuesta.getString("opcError");
                             if (Error == true) {
-                                nDialog.dismiss();
+                                nDialog.cancel();
                                 MuestraMensaje("Error" , Mensaje);
 
 
                             } else {
-                                MuestraMensaje("Aviso", "La evaluación fue exitosa");
+                                MuestraMensaje("Aviso", "La evaluación fue exitosa" );
 
-
-                                if(vcPersona.equals("Proveedor")) {
-                                    Intent Home = new Intent(opEvaluaciones.this, MainActivity.class);
-                                    startActivity(Home);
+                                if(vcTipoPersona.equals("proveedor")) {
+                                    MuestraMensaje("Aviso", "Dirígete a la sección de pedidos para finalizar la entrega" );
+                                    nDialog.cancel();
+                                    globales.vg_lEntregaCli = true;
                                 }else{
-                                    Intent Home = new Intent(opEvaluaciones.this, MainActivity.class);
-                                    startActivity(Home);
+                                    globales.vg_lEntregaCli = false;
                                 }
 
-                                opClienteEvaluaList.clear();
+                                    Intent Home = new Intent(opEvaluaciones.this, MainActivity.class);
+                                    startActivity(Home);
 
+
+                                opClienteEvaluaList.clear();
+                                nDialog.cancel();
                             }
                         } catch (JSONException e) {
                             Log.i("Error JSONExcepcion", e.getMessage());
@@ -364,6 +377,13 @@ public class opEvaluaciones extends AppCompatActivity {
             }
         };
         mRequestQueue.add(jsonObjectRequest);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
+                || super.onSupportNavigateUp();
     }
 
 }

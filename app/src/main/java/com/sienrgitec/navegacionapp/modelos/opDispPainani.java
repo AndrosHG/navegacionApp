@@ -14,8 +14,17 @@ public class opDispPainani implements Serializable {
     private Integer iEstadoProceso;
     private Integer iPainani;
     private Integer iVehiculo;
+    private Integer iUnidad;
     private Object  id;
 
+
+    public Integer getiUnidad() {
+        return iUnidad;
+    }
+
+    public void setiUnidad(Integer iUnidad) {
+        this.iUnidad = iUnidad;
+    }
 
     public Integer getiVehiculo() {
         return iVehiculo;
